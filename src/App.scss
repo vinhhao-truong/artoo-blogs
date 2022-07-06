@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&display=swap');
+@import './scss/variables';
+//Layout
+@import './scss/layout/navigation';
+@import './scss/layout/mobile-sub-nav';
+
+//Fragments
+@import './scss/fragments/blog';
+@import './scss/fragments/profile-title';
+@import './scss/fragments/new-post-btn';
+
+//Pages
+@import './scss/pages/newsfeed';
+@import './scss/pages/login';
+@import './scss/pages/landing';
+@import './scss/pages/signup';
+
+//Modals
+@import './scss/modals/react-modal';
+@import './scss/modals/new-post-modal';
+@import './scss//modals/new-post-modal';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 400;
+  background-color: $light-grey;
+  color: #000000;   
+  padding-bottom: 2rem;
+}

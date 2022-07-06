@@ -1,0 +1,24 @@
+@import "../variables";
+
+.Landing {
+  height: calc(100vh - 6rem);
+  position: relative;
+  @include flexAll(center, center, column);
+  h1 {
+    width: 60%;
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  &__links {
+    @include flexAll(center, center,column);
+    button {
+      @include styledBtn(10rem, 3rem, 20px);
+    }
+    .signup-link {
+      align-self: flex-end;
+      text-decoration: none;
+      margin-top: 0.5rem;
+      color: black;
+    }
+  }
+}

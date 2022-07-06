@@ -1,0 +1,26 @@
+@import '../variables';
+
+.MobileSubNav {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  border-top: solid 2px $light-grey;
+  background-color: $white;
+  &__NavMain {
+    @include flexAll(space-evenly);
+    li {
+      list-style: none;
+      a {
+        @include flexAll;
+        font-size: 10px;
+        flex-direction: column;
+        text-decoration: none;
+        margin: 0 1.5rem 0 1.5rem;
+        color: $light-green;
+        svg {
+          font-size: 28px;
+        }
+      }
+    }
+  }
+}

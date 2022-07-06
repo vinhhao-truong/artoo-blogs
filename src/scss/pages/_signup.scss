@@ -1,0 +1,50 @@
+@import "../variables";
+
+.Signup {
+  width: 60%;
+  min-height: 35.5rem;
+  max-width: 30rem;
+  display: block;
+  margin: 1rem auto;
+  border-radius: 20px;
+  background-color: $white;
+  .SignupForm {
+    @include flexAll(center, flex-start, column);
+    background-color: $white;
+    padding: 1.5rem 2rem;
+
+    & > * {
+      margin: 0.5rem 0;
+    }
+
+    h1 {
+      margin-bottom: 0.5rem;
+    }
+
+    .profile-detail {
+      margin-bottom: 2rem;
+      & > * {
+        margin: 0.2rem 0;
+      }
+      .name {
+        @include flexAll(space-between);
+        & > * {
+          width: 48%;
+        }
+      }
+    }
+
+    .account-detail {
+      & > * {
+        margin: 0.2rem 0;
+      }
+    }
+
+    .submitBtn {
+      margin-top: 2rem;
+      @include styledBtn(7rem, 2rem, 15px);
+      align-self: center;
+      outline: none;
+    }
+  }
+}

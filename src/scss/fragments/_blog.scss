@@ -1,0 +1,45 @@
+@import '../variables';
+
+.Blog {
+  width: 50rem;
+  min-height: 10rem;
+  margin: 1rem;
+  background-color: $white;
+
+  border-radius: 10px;
+  &__Inner {
+    padding: 1rem;
+    &__Header {
+      @include flexAll(space-between);
+      margin-bottom: 1rem;
+      &__Menu {
+        button {
+          @include flexAll;
+          width: 2rem;
+          height: 2rem;
+          background-color: $white;
+          border-radius: 50%;
+          border: none;
+          outline: none;
+          cursor: pointer;
+          &:hover {
+            background-color: rgba($grey, 0.5);
+            transition-duration: 0.2s;
+          }
+        }        
+      }
+    }
+    &__Body {
+      white-space: pre-wrap; //to display new line if needed
+      a {
+        position: relative;
+        left: 50%;
+        right: 50%;
+        display: inline-block;
+        text-decoration: none;
+        text-align: center;
+      }
+      overflow: auto;
+    }
+  }
+}

@@ -1,0 +1,12 @@
+@import '../variables';
+
+.ProfileTitle {
+  @include flexAll(flex-start);
+  img {
+    @include imgRound(24px, 24px);
+  }
+  p {
+    margin-left: 0.2rem;
+    font-weight: 700;
+  }
+}
