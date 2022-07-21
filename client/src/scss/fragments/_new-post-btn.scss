@@ -1,0 +1,38 @@
+@import "../variables";
+
+.NewPostBtn {
+  @include flexAll;
+  font-size: 30px;
+  font-weight: 800;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 50%;
+  background-color: $light-green;
+  color: $white;
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  cursor: pointer;
+  outline: none;
+  animation-name: up-down;
+  animation-duration: 1.5s;
+  animation-delay: none;
+  animation-iteration-count: infinite;
+  @keyframes up-down {
+    50% {
+      transform: translateY(-5px);
+    }
+    100% {
+      transform: translate(0);
+    }
+  }
+  &:hover {
+    animation: hover 0.2s forwards;
+    @keyframes hover {
+      100% {
+        transform: scale(1.2);
+        transition-timing-function: ease-in;
+      }
+    }
+  }
+}

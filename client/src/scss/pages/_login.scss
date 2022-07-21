@@ -1,0 +1,32 @@
+@import "../variables";
+
+.Login {
+  width: 60%;
+  min-height: 21.5rem;
+  max-width: 30rem;
+  display: block;
+  margin: 1rem auto;
+  border-radius: 20px;
+  background-color: $white;
+  .LoginForm {
+    @include flexAll(center, flex-start, column);
+    background-color: $white;
+    padding: 1.5rem 2rem;
+
+    & > * {
+      margin: 0.5rem 0;
+    }
+
+    h1 {
+      margin-bottom: 0.5rem;
+    }
+
+    .submitBtn {
+      margin-top: 2rem;
+      @include styledBtn(7rem, 2rem, 15px);
+      align-self: center;
+      outline: none;
+
+    }
+  }
+}

@@ -1,0 +1,38 @@
+//Colors
+$white: #f8f9fa;
+$light-grey: #e7e7e7;
+$grey: #808080;
+$black: #17252a;
+$slight-green: #def2f1;
+$light-green: #3aafa9;
+
+//Devices width breakpoints
+$max-phone: 480px;
+$max-tablet: 768px;
+$max-smScreen: 1024px;
+$max-mdScreen: 1200px;
+$min-lgScreen: 1201px;
+
+//Mixins
+@mixin flexAll($justify: center, $align: center, $dir: row) {
+  display: flex;
+  flex-direction: $dir;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+@mixin imgRound($width, $height) {
+  width: $width;
+  height: $height;
+  border-radius: 50%;
+}
+
+@mixin styledBtn($width, $height, $textSize) {
+  width: $width;
+  height: $height;
+  border-radius: 30px;
+  border: none;
+  font-size: $textSize;
+  cursor: pointer;
+}
+
