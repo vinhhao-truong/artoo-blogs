@@ -1,26 +1,26 @@
 import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-
-import { useSelector, useDispatch } from "react-redux";
-import { selectAuth, login } from "../store/user/auth-slice";
-import { blankProfile } from "../store/user/myProfile-slice";
-import { blankBlogs } from "../store/user/myBlogs-slice";
-
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import validateDate from "validate-date";
+import { CirclePicker as ColorPicker } from "react-color";
 
 import {
   PasswordField,
   TxtField,
   DateField,
-} from "../fragments/StyledTextField";
+} from "../styled-components/StyledTextField";
+import LoadingModal from "../modals/Loading";
+import AlertModal from "../modals/Alert";
+import useResponsive from "../hooks/useResponsive";
 
 const Signup = () => {
   const newAcc = {
     profile: {
       firstName: "",
       lastName: "",
-      artName: "",
+      nickname: "",
       dob: "",
+      pickedColor: "#3aafa9",
     },
     account: {
       email: "",
@@ -29,9 +29,13 @@ const Signup = () => {
   };
   const err = (state, message) => ({ isErr: state, msg: message });
 
-  const [isLoading, setIsLoading] = useState(false);
+  const isTabletOrMobile = useResponsive("Tablet or Mobile");
 
-  const [account, setAccount] = useState(newAcc);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isFailed, setIsFailed] = useState(false);
+
+  const [account, setAccount] = useState({ ...newAcc });
   const [rePw, setRePw] = useState("");
 
   const [dobErr, setDobErr] = useState(err(false, ""));
@@ -39,12 +43,69 @@ const Signup = () => {
   const [pwErr, setPwErr] = useState(err(false, ""));
   const [rePwErr, setRePwErr] = useState(err(false, ""));
 
+  const navigate = useNavigate();
+
+  const colorCollection = [
+    "#70e000",
+    "#3aafa9",
+    "#fec89a",
+    "#e5989b",
+    "#ff0000",
+    "#e63946",
+    "#8b8c89",
+    "#505050",
+    "#a68a64",
+    "#7f4f24",
+    "#ff8fab",
+    "#bdb2ff",
+    "#ffba08",
+    "#e85d04",
+    "#00bbf9",
+    "#3a86ff",
+  ];
+
+  const handleColorChangeComplete = (color, e) => {
+    setAccount((prev) => ({
+      ...prev,
+      profile: {
+        ...prev.profile,
+        pickedColor: color.hex,
+      },
+    }));
+  };
+
+  const handleSuccessModal = (e) => {
+    e.preventDefault();
+    setIsSuccess(false);
+    navigate("/login");
+  };
+
+  const handleSignupAgain = (e) => {
+    e.preventDefault();
+    setIsSuccess(false);
+    setAccount({ ...newAcc });
+    setRePw("");
+  };
+
+  const handleFailedModal = (e) => {
+    e.preventDefault();
+    setIsFailed(false);
+    setAccount((prev) => ({
+      ...prev,
+      account: {
+        ...prev.account,
+        password: "",
+      },
+    }));
+    setRePw("");
+  };
+
   const handleSubmitSignup = async (e) => {
     e.preventDefault();
     const isFailed = rePwErr.isErr || pwErr.isErr || emailErr.isErr;
 
     if (isFailed) {
-      alert("Please correct the registration form!");
+      setIsFailed(true);
     } else {
       try {
         setIsLoading(true);
@@ -64,14 +125,14 @@ const Signup = () => {
             email: account.account.email,
             firstName: account.profile.firstName,
             lastName: account.profile.lastName,
-            artName: account.profile.artName,
-            dob: account.profile.dob,
-            myBlogs: [],
+            nickname: account.profile.nickname,
+            dob: account.profile.dob.toISOString(),
+            pickedColor: account.profile.pickedColor
           },
         };
         await axios.post("http://localhost:3001/users/", newUser);
         setIsLoading(false);
-        alert(`${account.account.email} has been created successfully!`);
+        setIsSuccess(true);
       } catch (err) {
         console.log(err);
         setIsLoading(false);
@@ -100,9 +161,19 @@ const Signup = () => {
         dob: value,
       },
     }));
-    //throw error for future date
-    if (value >= now) {
-      setDobErr(err(true, "Date of birth must be in the past!"));
+    if (value) {
+      //throw error for future date
+      if (value >= now) {
+        setDobErr(err(true, "Date of birth must be in the past!"));
+      } else {
+        setDobErr(err(false, ""));
+      }
+      //validate date input
+      if (
+        !validateDate(value.toLocaleString("en-GB"), "boolean", "dd/mm/yyyy")
+      ) {
+        setDobErr(err(true, "Please enter valid date!"));
+      }
     } else {
       setDobErr(err(false, ""));
     }
@@ -159,7 +230,7 @@ const Signup = () => {
       // const noSpecialCase = /^[A-Za-z0-9_-]+$/i.test(e.target.value);
       // const onlyNums = /^[0-9]/.test(e.target.value);
       // const onlyLetters = /[A-Za-z]/.test(e.target.value);
-      const eightOrMore = e.target.value.length >= 8;
+      // const eightOrMore = e.target.value.length >= 8;
 
       if (e.target.value.length < 8) {
         setPwErr(err(true, errorMsg[0]));
@@ -183,7 +254,14 @@ const Signup = () => {
   };
 
   return (
-    <div className="Signup">
+    <div
+      style={
+        isTabletOrMobile
+          ? { width: "95%", margin: `${0.5} rem ${0.5} rem` }
+          : {}
+      }
+      className="Signup"
+    >
       <form className="SignupForm" onSubmit={handleSubmitSignup}>
         <h1>
           Sign up to <span className="pickedColor">Artoo</span> Blogs
@@ -204,14 +282,26 @@ const Signup = () => {
             />
           </div>
           <TxtField
-            onChange={handleTFChange({ type: "profile", prop: "artName" })}
-            value={account.profile.artName}
-            label="Art Name"
+            onChange={handleTFChange({ type: "profile", prop: "nickname" })}
+            value={account.profile.nickname}
+            label="Nickname (optional)"
             error={false}
           />
+          <div className="color-field">
+            <p>Set your profile color: </p>
+            <ColorPicker
+              className="color-picker"
+              width={225}
+              circleSize={20}
+              circleSpacing={8}
+              onChangeComplete={handleColorChangeComplete}
+              colors={colorCollection}
+            />
+          </div>
+
           <DateField
             disableFuture
-            label="Date of Birth"
+            label="Date of Birth *"
             value={account.profile.dob}
             onChange={handleDobChange}
             error={dobErr}
@@ -228,14 +318,14 @@ const Signup = () => {
           />
           <PasswordField
             error={pwErr}
-            label="Password"
+            label="Password *"
             value={account.account.password}
             onChange={handlePwChange}
             required
           />
           <PasswordField
             error={rePwErr}
-            label="Re-enter Password"
+            label="Confirm Password *"
             value={rePw}
             onChange={handleRePwChange}
             required
@@ -244,8 +334,23 @@ const Signup = () => {
         <button className="submitBtn pickedColorBg-hover" autoFocus>
           Sign Up
         </button>
-        {isLoading && <p>Loading...</p>}
       </form>
+      <LoadingModal isLoading={isLoading} />
+      <AlertModal
+        type="right"
+        isOpen={isSuccess}
+        onOKClick={handleSuccessModal}
+        onCancelClick={handleSignupAgain}
+        msg={`${account.account.email} has been created successfully!`}
+        okContent="Back to Login"
+        cancelContent="Register more?"
+      />
+      <AlertModal
+        type="wrong"
+        isOpen={isFailed}
+        onOKClick={handleFailedModal}
+        msg="Please enter information correctly!"
+      />
     </div>
   );
 };

@@ -2,11 +2,18 @@
 
 .ProfileTitle {
   @include flexAll(flex-start);
-  img {
-    @include imgRound(24px, 24px);
+  a {
+    img {
+      @include imgRound(32px, 32px);
+    }
   }
-  p {
-    margin-left: 0.2rem;
+  
+  .name {
+    text-decoration: none;
+    margin-left: 0.3rem;
     font-weight: 700;
+    &:hover {
+      filter: brightness(90%);
+    }
   }
 }

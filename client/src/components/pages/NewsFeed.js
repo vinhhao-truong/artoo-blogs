@@ -1,34 +1,33 @@
-import React, {useState, useEffect, useCallback} from "react";
-import axios from "axios";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { selectMyProfile } from "../store/user/myProfile-slice";
 
-import NewPostBtn from '../fragments/NewPostBtn';
-import NewPostModal from "../modals/NewPostModal";
-import BlogList from "../fragments/BlogList";
+import AddOrUpdateModal from "../modals/AddOrUpdateModal";
+
+import AddBlogBtn from "../styled-components/AddBlogBtn";
+import FetchBlogList from "../fragments/FetchedBlogList";
 
 const NewsFeed = () => {
-  const [isNewPostModalOpen, setIsNewPostModalOpen] = useState(false);
-  const [newsFeedBlogs, setNewsFeedBlogs] = useState([]);
-
-  const callNewsFeed = useCallback(async () => {
-    try {
-      const res = await axios.get("http://localhost:3001/blogs/");
-      const data = await res.data.data;
-      console.log(data)
-      setNewsFeedBlogs(data);
-    } catch (err) {
-      console.log(err);
-    }
-  }, [])
-
-  useEffect(() => {
-    callNewsFeed();
-  }, [callNewsFeed])
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const myProfile = useSelector(selectMyProfile);
 
   return (
-    <div className="NewsFeed">  
-      <BlogList blogs={newsFeedBlogs} />
-      <NewPostBtn onOpenModal={() => {setIsNewPostModalOpen(true)}} />
-      <NewPostModal isOpen={isNewPostModalOpen} onClose={() => {setIsNewPostModalOpen(false)}} />
+    <div className="NewsFeed">
+      <FetchBlogList
+        url="http://localhost:3001/blogs/"
+        emptyMsg="No blogs to show!"
+        state={myProfile.myBlogs}
+      />
+      <AddBlogBtn
+        onClick={() => {
+          setIsAddModalOpen(true);
+        }}
+      />
+      <AddOrUpdateModal
+        setIsOpen={setIsAddModalOpen}
+        isOpen={isAddModalOpen}
+        action="add"
+      />
     </div>
   );
 };

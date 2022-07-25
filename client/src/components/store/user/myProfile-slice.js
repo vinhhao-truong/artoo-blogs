@@ -5,11 +5,12 @@ const initialState = {
   email: "",
   firstName: "",
   lastName: "",
-  artName: "",
+  nickname: "",
   dob: "",
   profilePic:
     "https://images.pexels.com/photos/8652888/pexels-photo-8652888.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260",
-  pickedColor: "#3aafa9"
+  pickedColor: "#3aafa9",
+  myBlogs: [] //to handle front end rendering
 }
 
 const myProfileSlice = createSlice({
@@ -18,12 +19,22 @@ const myProfileSlice = createSlice({
   reducers: {
     initiateProfile: (state, action) => {
       return {...initialState, ...action.payload}
+    },
+    addBlog: (state, action) => {
+      state.myBlogs.push(action.payload.newBlog);
+    },
+    deleteBlog: (state, action) => {
+      return {...state, myBlogs: state.myBlogs.filter(blog => blog._id !== action.payload.blogId)};
+    },
+    updateBlog: (state, action) => {
+      const myBlogsRemovedById = state.myBlogs.filter(blog => blog._id !== action.payload.updatedBlog._id);
+      return { ...state, myBlogs: myBlogsRemovedById.concat(action.payload.updatedBlog) }
     }
   }
 
 })
 
-export const { initiateProfile } = myProfileSlice.actions;
+export const { initiateProfile, addBlog, deleteBlog, updateBlog } = myProfileSlice.actions;
 export {initialState as blankProfile}
 export const selectMyProfile = state => state.myProfile;
 export default myProfileSlice.reducer

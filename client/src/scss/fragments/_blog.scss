@@ -1,45 +1,86 @@
-@import '../variables';
+@import "../variables";
 
-.Blog {
-  width: 50rem;
-  min-height: 10rem;
-  margin: 1rem;
-  background-color: $white;
-
-  border-radius: 10px;
-  &__Inner {
-    padding: 1rem;
-    &__Header {
-      @include flexAll(space-between);
-      margin-bottom: 1rem;
-      &__Menu {
-        button {
-          @include flexAll;
-          width: 2rem;
-          height: 2rem;
-          background-color: $white;
-          border-radius: 50%;
-          border: none;
-          outline: none;
-          cursor: pointer;
-          &:hover {
-            background-color: rgba($grey, 0.5);
-            transition-duration: 0.2s;
+.BlogList {
+  @include flexAll(flex-start, center, column);
+  width: 40rem;
+  max-width: 80%;
+  .Blog {
+    width: 100%;
+    min-height: 20rem;
+    margin: 1rem;
+    background-color: $white;
+    border-radius: 10px;
+    box-shadow: 10px 8px 6px rgba(#000000, 0.02);
+    
+    
+    &__Inner {
+      position: relative;
+      .head-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 0.5rem;
+        width: 100%;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+      }
+      padding: 1rem;
+      &__Header {
+        @include flexAll(space-between);
+        margin-bottom: 1rem;
+        .header-right {
+          @include flexAll(flex-end);
+          .upload-time {
+            margin-right: 1rem;
+            font-style: italic;
+            color: $grey;
           }
-        }        
+          .menu {
+            button {
+              @include flexAll;
+              width: 2rem;
+              height: 2rem;
+              background-color: $light-grey;
+              border-radius: 50%;
+              border: none;
+              outline: none;
+              cursor: pointer;
+              &:hover, &:active {
+                background-color: rgba($grey, 0.5);
+                transition-duration: 0.2s;
+              }
+            }
+          }
+        }
       }
-    }
-    &__Body {
-      white-space: pre-wrap; //to display new line if needed
-      a {
-        position: relative;
-        left: 50%;
-        transform: translateX(-50%);
-        display: inline-block;
-        text-decoration: none;
-        text-align: center;
+      &__Body {
+        white-space: pre-wrap; //to display new line if needed
+        overflow: auto;
+        & > * {
+          margin: 0rem 0 1rem;
+        }
+        .body-header {
+          width: 100%;
+          @include flexAll(space-between);
+          p {
+
+          }
+          a {
+            // left: 50%;
+            // transform: translateX(-50%);
+  
+            display: inline-block;
+            text-decoration: none;
+            text-align:right;
+            &:hover {
+              filter: brightness(80%);
+            }
+          }
+        }
+        p {
+
+        }
       }
-      overflow: auto;
     }
   }
 }

@@ -1,20 +1,39 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
-  isAuth: false,
-  idToken: "",
-  uid: "",
+const auth = (isAth, token, uid) => ({
+  isAuth: isAth,
+  idToken: token,
+  uid: uid,
+});
+
+const initialAuth = () => {
+  const isLoggedIn = !!localStorage.getItem("ArtooBlogs-auth");
+  if (isLoggedIn) {
+    const { idToken, uid } = JSON.parse(
+      localStorage.getItem("ArtooBlogs-auth")
+    );
+    return auth(true, idToken, uid);
+  } else {
+    return auth(false, "", "");
+  }
 };
 
 const authSlice = createSlice({
   name: "auth",
-  initialState: initialState,
+  initialState: initialAuth(),
   reducers: {
     login: (state, action) => {
-      return { ...state, isAuth: true, idToken: action.payload.idToken, uid: action.payload.uid };
+      const authenticated = auth(
+        true,
+        action.payload.idToken,
+        action.payload.uid
+      );
+      localStorage.setItem("ArtooBlogs-auth", JSON.stringify(authenticated));
+      return authenticated;
     },
     logout: (state) => {
-      return { ...state, isAuth: false, idToken: '', uid: '' };
+      localStorage.removeItem("ArtooBlogs-auth");
+      return auth(false, "", "");
     },
   },
 });

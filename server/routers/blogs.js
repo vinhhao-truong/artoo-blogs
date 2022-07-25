@@ -1,59 +1,79 @@
 const blogRouter = require("express").Router();
+const handleFind = require("../controller/handleFind");
 const { BlogModel } = require("../models/Blog");
 
 const returnedData = (msg, data) => ({ message: msg, data: data });
 
+const logErrQuery = (err) => {
+  if (err) {
+    console.log(err);
+  }
+};
+
 blogRouter
   .route("/")
   .get((req, res) => {
-    BlogModel.find((err, foundBlogs) => {
-      if (!err) {
-        res.send(returnedData("All blogs found successfully!", foundBlogs));
-      } else {
-        res.send(err);
-      }
-    });
+    handleFind("All blogs found successfully!", res, BlogModel, "find");
+    console.log("All blogs found or error occurred (if have above)!");
   })
-  .post(async (req, res) => {
+  .post((req, res) => {
     try {
       if (req.body.newBlog) {
         const newBlog = new BlogModel(req.body.newBlog);
         //Save to overall blogs db
-        await newBlog.save((err) => {
-          if (!err) {
+        newBlog.save((queryErr) => {
+          if (!queryErr) {
+            res.send(
+              returnedData("The blog created successfully!", null)
+            );
             console.log("The new blog saved successfully!");
           } else {
-            console.log(err);
+            console.log(queryErr);
           }
         });
-        //Update my blogs
-        await UserModel.updateOne(
-          { _id: req.body.newBlog.owner },
-          {
-            $push: { myBlogs: req.body.newBlog },
-          },
-          (err) => {
-            if (!err) {
-              console.log("The new blog saved successfully!");
-            } else {
-              console.log(err);
-            }
-          }
-        );
       }
     } catch (err) {
       res.send(err);
     }
+  })
+  .delete((req, res) => {
+    try {
+      //delete from the blogs collections
+      BlogModel.deleteOne({ _id: req.body._id }, (queryErr) => {
+        if (!queryErr) {
+          res.send(
+            returnedData("The blog has been deleted from the database!", null)
+          );
+        } else {
+          res.send(queryErr);
+        }
+      })
+    } catch (err) {
+      console.log(err);
+    }
+    console.log("The blog is delete or error occurred (if have above)!");
+  })
+  .patch((req, res) => {
+    try {
+      BlogModel.updateOne(
+        { _id: req.body.updatedBlog._id },
+        {
+          $set: req.body.updatedBlog,
+        },
+        logErrQuery
+      )
+      res.send(returnedData("The post updated!", null))
+      console.log("The blog is updated or error occurred (if have above)!");
+    } catch (err) {
+      console.log(err);
+    }
   });
 
 blogRouter.route("/:blogId").get((req, res) => {
-  BlogModel.findOne({ _id: req.params.blogId }, (err, foundBlogs) => {
-    if (!err) {
-      res.send(returnedData(`${foundBlogs.title} found successfully!`, foundBlogs));
-    } else {
-      res.send(err);
-    }
+  handleFind("The blog is found!", res, BlogModel, "findOne", {
+    _id: req.params.blogId,
   });
+  console.log("The blog is found or error occurred (if have above)!");
 });
 
 module.exports = blogRouter;

@@ -5,7 +5,7 @@
   position: relative;
   @include flexAll(center, center, column);
   h1 {
-    width: 60%;
+    min-width: 60%;
     text-align: center;
     margin-bottom: 3rem;
   }

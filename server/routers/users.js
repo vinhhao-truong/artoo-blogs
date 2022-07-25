@@ -1,18 +1,16 @@
 const usersRouter = require("express").Router();
+
+const handleFind = require("../controller/handleFind");
+
 const { UserModel } = require("../models/User");
+const { BlogModel } = require("../models/Blog");
 
 const returnedData = (msg, data) => ({ message: msg, data: data });
 
 usersRouter
   .route("/")
   .get((req, res) => {
-    UserModel.find((err, foundUsers) => {
-      if (!err) {
-        res.send(returnedData("All users are found!", foundUsers));
-      } else {
-        res.send(err);
-      }
-    });
+    handleFind("All users are found!", res, UserModel, "find");
   })
   .post(async (req, res) => {
     try {
@@ -20,8 +18,7 @@ usersRouter
       if (req.body.newUser) {
         const newUser = new UserModel(req.body.newUser);
         newUser.save();
-        console.log(req.body.user);
-        res.send("New User Created!");
+        res.send(returnedData("New User Created!", null));
       }
     } catch (err) {
       console.log(err);
@@ -30,13 +27,36 @@ usersRouter
 
 usersRouter.route("/:uid").get((req, res) => {
   const userId = req.params.uid;
-  UserModel.findOne({ _id: userId }, (findErr, foundData) => {
-    if (!findErr) {
-      res.send(returnedData(`${foundData.firstName} is found!`, foundData));
-    } else {
-      res.send(findErr);
+  const query = req.query.q;
+
+  if (query) {
+    switch (query) {
+      case "myBlogs":
+        handleFind(
+          "Blog list is found!",
+          res,
+          BlogModel,
+          "find",
+          {owner: userId}
+        );
+        break;
+      case "pickedColor":
+        handleFind(
+          "User's picked color is found",
+          res,
+          UserModel,
+          "findById",
+          userId,
+          "pickedColor"
+        );
+        break;
+      default:
     }
-  });
+  }
+
+  if (!query) {
+    handleFind("User is found!", res, UserModel, "findOne", { _id: userId });
+  }
 });
 
-module.exports = usersRouter
+module.exports = usersRouter;

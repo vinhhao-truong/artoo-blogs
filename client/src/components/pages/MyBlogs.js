@@ -1,52 +1,32 @@
-import React, { useState, useContext, useEffect } from "react";
-import axios from "axios";
-
-import { Outlet } from "react-router-dom";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { selectMyBlogs } from "../store/user/myBlogs-slice";
 import { selectMyProfile } from "../store/user/myProfile-slice";
 
-import NewPostBtn from "../fragments/NewPostBtn";
-import NewPostModal from "../modals/NewPostModal";
+import AddBlogBtn from "../styled-components/AddBlogBtn";
+import AddOrUpdateModal from "../modals/AddOrUpdateModal";
 
-import BlogList from "../fragments/BlogList";
+import FetchedBlogList from "../fragments/FetchedBlogList";
 
-const MyBlogs = () => {
-  const myBlogs = useSelector(selectMyBlogs);
+const MyBlogs = ({ uid }) => {
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const myProfile = useSelector(selectMyProfile);
 
-  const [isNewPostModalOpen, setIsNewPostModalOpen] = useState(false);
-  const [isEmpty, setIsEmpty] = useState(false);
-
-  useEffect(() => {
-    if(myBlogs.length > 0) {
-      setIsEmpty(false);
-    } else {
-      setIsEmpty(true)
-    }
-  }, [myBlogs])
-
-
-  const handleOpenModal = (e) => {
-    e.preventDefault();
-    setIsNewPostModalOpen(true);
-  };
-
   return (
-    <div className="NewsFeed MyBlogs">
-      {
-        isEmpty ? (
-          <p>You haven't created any posts lately :(</p>
-        ) : (
-          <BlogList blogs={myBlogs} />
-        )
-      }      
-      <NewPostBtn onOpenModal={handleOpenModal} />
-      <NewPostModal
-        isOpen={isNewPostModalOpen}
-        onClose={() => {
-          setIsNewPostModalOpen(false);
+    <div className="NewsFeed">
+      <FetchedBlogList
+        url={`http://localhost:3001/users/${uid}?q=myBlogs`}
+        emptyMsg="You don't have any blogs!"
+        state={myProfile.myBlogs}
+      />
+      <AddBlogBtn
+        onClick={() => {
+          setIsAddModalOpen(true);
         }}
+      />
+      <AddOrUpdateModal
+        setIsOpen={setIsAddModalOpen}
+        isOpen={isAddModalOpen}
+        action="add"
       />
     </div>
   );

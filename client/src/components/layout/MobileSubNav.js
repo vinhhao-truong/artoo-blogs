@@ -2,6 +2,8 @@ import React from "react";
 import useResponsive from "../hooks/useResponsive";
 import { Link } from "react-router-dom";
 import { BiNews, BiHomeHeart } from "react-icons/bi";
+import { selectMyProfile } from "../store/user/myProfile-slice";
+import { useSelector } from "react-redux";
 
 const NavMain = (props) => {
   return (
@@ -12,10 +14,11 @@ const NavMain = (props) => {
 };
 
 const NavMainItem = (props) => {
+  const myProfile = useSelector(selectMyProfile)
   const Logo = props.inner;
   return (
     <li key={props.idx}>
-      <Link to={props.item.path}><Logo /><span>{props.item.title}</span></Link>
+    <Link style={{color: myProfile.pickedColor}} to={props.item.path}><Logo /><span>{props.item.title}</span></Link>
     </li>
   );
 };

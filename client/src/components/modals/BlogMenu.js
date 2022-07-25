@@ -1,7 +1,6 @@
 import React from "react";
 import { Menu, MenuButton, MenuItem } from "@szhsin/react-menu";
 import "@szhsin/react-menu/dist/index.css";
-import { BsThreeDots } from "react-icons/bs";
 
 const BottomMenu = ({ items, menuClasses, btnUI, align }) => {
   return (

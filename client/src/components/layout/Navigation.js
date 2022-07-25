@@ -1,12 +1,13 @@
 import React, { useState, useRef, forwardRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectAuth, login, logout } from "../store/user/auth-slice";
+import { logout } from "../store/user/auth-slice";
+import { selectMyProfile } from "../store/user/myProfile-slice";
 
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { TiArrowSortedDown } from "react-icons/ti";
 
 import useResponsive from "../hooks/useResponsive";
-import { ControlledMenu, Menu, MenuButton, MenuItem } from "@szhsin/react-menu";
+import { ControlledMenu, MenuItem } from "@szhsin/react-menu";
 
 const Logo = (props) => {
   return <div className="Navigation__Logo">{props.children}</div>;
@@ -31,11 +32,19 @@ const NavMainItem = ({ idx, item }) => {
 };
 
 const SideProfile = forwardRef((props, ref) => {
+  const myProfile = useSelector(selectMyProfile)
+  const navigate = useNavigate();
+
+  const handleSideProfileClick = (e) => {
+    navigate(`/profile/${myProfile._id}`)
+  }
+
   return (
     <div
       ref={ref}
-      className="Navigation__SideProfile pickedColor-hoverOnly"
+      className="Navigation__SideProfile pickedColor-hover"
       onMouseEnter={props.onMouseEnter}
+      onClick={handleSideProfileClick}
     >
       {props.children}
     </div>
@@ -47,7 +56,7 @@ const PrivateNav = ({ isMobileOrTablet }) => {
   const sideProfileRef = useRef();
   const [sideProfileIsOpened, setSideProfileIsOpened] = useState(false);
 
-  const auth = useSelector(selectAuth);
+  const myProfile = useSelector(selectMyProfile);
   const dispatch = useDispatch();
 
   const mainItems = [
@@ -85,7 +94,12 @@ const PrivateNav = ({ isMobileOrTablet }) => {
           setSideProfileIsOpened(true);
         }}
       >
-        {!isMobileOrTablet && <p>Welcome</p>}
+        {!isMobileOrTablet && (
+          <p>
+            Welcome,{" "}
+            {myProfile.nickname ? myProfile.nickname : myProfile.firstName}
+          </p>
+        )}
         <div className="image">
           <img
             src="https://images.pexels.com/photos/8652888/pexels-photo-8652888.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260"
@@ -101,11 +115,11 @@ const PrivateNav = ({ isMobileOrTablet }) => {
         onClose={() => setSideProfileIsOpened(false)}
         align="end"
       >
-        {
-          sideProfileItems.map((item, idx) => (
-            <MenuItem onClick={item.onClick} key={idx}>{item.name}</MenuItem>
-          ))
-        }
+        {sideProfileItems.map((item, idx) => (
+          <MenuItem onClick={item.onClick} key={idx}>
+            {item.name}
+          </MenuItem>
+        ))}
       </ControlledMenu>
     </>
   );
@@ -113,9 +127,6 @@ const PrivateNav = ({ isMobileOrTablet }) => {
 
 //not auth
 const PublicNav = ({ isMobileOrTablet }) => {
-  const auth = useSelector(selectAuth);
-  const dispatch = useDispatch();
-
   const mainItems = [
     {
       title: "Log In",
@@ -127,15 +138,13 @@ const PublicNav = ({ isMobileOrTablet }) => {
     },
   ];
 
-  if (!isMobileOrTablet) {
-    return (
-      <NavMain className="PublicNav">
-        {mainItems.map((item, idx) => (
-          <NavMainItem key={idx} item={item} />
-        ))}
-      </NavMain>
-    );
-  }
+  return (
+    <NavMain className={`PublicNav ${isMobileOrTablet ? "mobile" : ""}`}>
+      {mainItems.map((item, idx) => (
+        <NavMainItem key={idx} item={item} />
+      ))}
+    </NavMain>
+  );
 };
 
 const Navigation = ({ isLoggedIn }) => {

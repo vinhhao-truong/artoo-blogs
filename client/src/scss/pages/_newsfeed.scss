@@ -1,5 +1,35 @@
 @import "../variables";
 
 .NewsFeed {
-  @include flexAll;
+  min-height: calc(100vh - 6rem);
+  @include flexAll(center, flex-start);
+  .EmptyList {
+    position: relative;
+    height: 100%;
+    width: 50%;
+    max-width: 40rem;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    @include flexAll(center, center, column);
+    & > * {
+      margin: 1rem 0;
+    }
+    img {
+      width: 50%;
+      height: 50%;
+      opacity: 5%;
+      -webkit-user-drag: none;
+      user-select: none;
+      -moz-user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+    }
+    h1 {
+      position: absolute;
+      text-align: center;
+    }
+  }
 }

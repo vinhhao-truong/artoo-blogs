@@ -4,6 +4,10 @@ const blogSchema = mongoose.Schema({
   _id: {
     type: String,
     required: true
+  }, 
+  uploadTime: {
+    type: Date,
+    require: true
   },
   owner: {
     type: String,

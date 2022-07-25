@@ -7,7 +7,7 @@
 //Fragments
 @import './scss/fragments/blog';
 @import './scss/fragments/profile-title';
-@import './scss/fragments/new-post-btn';
+@import './scss/fragments/add-blog-btn';
 
 //Pages
 @import './scss/pages/newsfeed';
@@ -17,8 +17,9 @@
 
 //Modals
 @import './scss/modals/react-modal';
-@import './scss/modals/new-post-modal';
-@import './scss//modals/new-post-modal';
+@import './scss/modals/add-update-modal';
+@import './scss/modals/loading-modal';
+@import './scss/modals/alert-modal';
 
 * {
   margin: 0;
@@ -32,4 +33,15 @@ body {
   background-color: $light-grey;
   color: #000000;   
   padding-bottom: 2rem;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 0.3rem;
+  }
+  &::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: 1px solid slategrey;
+  }
 }
