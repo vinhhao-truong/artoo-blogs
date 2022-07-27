@@ -5,8 +5,8 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 
 //import routers
-const userRouter = require("./routers/users");
-const blogRouter = require("./routers/blogs");
+const userRouter = require(`${__dirname}/routers/users`);
+const blogRouter = require(`${__dirname}/routers/blogs`);
 
 const app = express();
 

@@ -1,57 +1,90 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
-import ReactLoading from 'react-loading';
+import { useSelector } from "react-redux";
+import { selectMyProfile } from "../store/user/myProfile-slice";
+
+import MenuThreeDots from "../styled-components/MenuThreeDots";
+import "@szhsin/react-menu/dist/index.css";
+import { BsThreeDots } from "react-icons/bs";
+
+import useGETFetch from "../hooks/useFetch";
+import LoadingBar from "react-top-loading-bar";
+import { timeDiffFromNow } from "../funcs/formatTime";
+
+const ThisBlog = ({ owner, blog }) => {
+  return (
+    <div className="BlogDetail__blog">
+      <MenuThreeDots blog={blog} menuClasses="menu" />
+      <div
+        style={{
+          backgroundColor: `${owner.pickedColor}`,
+        }}
+        className="color-bar"
+      ></div>
+
+      <Link to={`/profile/${owner._id}`} className="img"></Link>
+      <div className="header">
+        <Link
+          style={{
+            color: `${owner.pickedColor}`,
+          }}
+          to={`/profile/${owner._id}`}
+        >
+          {owner.nickname ? owner.nickname : owner.firstName}
+        </Link>
+        <p>{timeDiffFromNow(blog.uploadTime)}</p>
+      </div>
+      <div className="detail">
+        <h2>{blog.title}</h2>
+        <p>{blog.content}</p>
+      </div>
+    </div>
+  );
+};
 
 const BlogDetail = () => {
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const thisBlogId = queryParams.get("blogId");
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [thisBlog, setThisBlog] = useState(null);
+  const [thisProfile, setThisProfile] = useState(null);
 
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const { search } = useLocation();
+  const params = new URLSearchParams(search);
+  const paramBlogId = params.get("blogId");
+  const paramOwnerId = params.get("owner");
+  const { resData: fetchedBlog } = useGETFetch(
+    `http://localhost:3001/blogs/${paramBlogId}`
+  );
+  const { resData: fetchedOwner } = useGETFetch(
+    `http://localhost:3001/users/${paramOwnerId}`
+  );
 
-  const blankBlog = {
-    _id: "",
-    title: "",
-    owner: "",
-    content: "",
-    category: "",
-    reactions: [],
-    comments: [],
-  };
-
-  const [thisBlog, setThisBlog] = useState({ ...blankBlog });
-
-  const callBlog = async () => {
-    setIsLoading(true);
-    try {
-      const res = await axios.get(`http://localhost:3001/blogs/${thisBlogId}`);
-      const blogData = await res.data.data;
-      console.log(blogData)
-      setThisBlog({ ...blogData });
-    } catch(err) {
-      setError(true);
-    }
-    setIsLoading(false);
-  };
+  const myProfile = useSelector(selectMyProfile);
 
   useEffect(() => {
-    callBlog();
-  }, []);
+    setLoadingProgress(33);
+    setThisBlog(fetchedBlog);
+    setLoadingProgress(66);
+    setThisProfile(fetchedOwner);
+    setLoadingProgress(100);
+  }, [fetchedBlog, fetchedOwner]);
 
   return (
     <div className="BlogDetail">
-      {/* {thisBlog ? (
-        <div className="BlogDetail">
-          <h2>{thisBlog.title}</h2>
-          <p>{thisBlog.content}</p>
-        </div>
+      {thisBlog && thisProfile ? (
+        <>
+          <ThisBlog blog={thisBlog} owner={thisProfile} />
+        </>
       ) : (
         <p>No blog found!</p>
-      )} */}
-      {isLoading}
-    </div>    
+      )}
+      <LoadingBar
+        onLoaderFinished={() => setLoadingProgress(0)}
+        color={myProfile.pickedColor}
+        progress={loadingProgress}
+      />
+    </div>
   );
 };
 

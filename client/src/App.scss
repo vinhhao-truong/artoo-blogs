@@ -14,12 +14,18 @@
 @import './scss/pages/login';
 @import './scss/pages/landing';
 @import './scss/pages/signup';
+@import './scss/pages/profile';
+@import "./scss/pages/blog-detail";
 
 //Modals
 @import './scss/modals/react-modal';
 @import './scss/modals/add-update-modal';
 @import './scss/modals/loading-modal';
 @import './scss/modals/alert-modal';
+@import './scss/modals/popup-modal';
+
+//Styled Components
+@import './scss/styled-components/menu-3dots';
 
 * {
   margin: 0;

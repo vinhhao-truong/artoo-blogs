@@ -35,22 +35,6 @@
             font-style: italic;
             color: $grey;
           }
-          .menu {
-            button {
-              @include flexAll;
-              width: 2rem;
-              height: 2rem;
-              background-color: $light-grey;
-              border-radius: 50%;
-              border: none;
-              outline: none;
-              cursor: pointer;
-              &:hover, &:active {
-                background-color: rgba($grey, 0.5);
-                transition-duration: 0.2s;
-              }
-            }
-          }
         }
       }
       &__Body {

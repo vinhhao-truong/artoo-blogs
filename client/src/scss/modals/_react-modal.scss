@@ -26,4 +26,12 @@
       height: 100%;
     }
   }
+  .PopupOverlay{
+    background-color: none;
+    visibility: none;
+    opacity: none;
+    z-index: 0;
+    width: 100%;
+    @include flexAll();
+  }
 }
