@@ -32,6 +32,7 @@ const PopupModal = ({ msg, action, isOpen, setIsOpen }) => {
             {action === "copy" && <FaCopy />}
             {action === "add" && <RiFileAddFill />}
             {action === "update" && <RiFileEditFill />}
+            {action === "update profile"}
             <p>{msg}</p>
           </div>
         </ReactModal>

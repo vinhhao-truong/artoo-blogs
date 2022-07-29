@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ReactModal from "react-modal";
 
-import AddOrUpdateForm from "../forms/AddOrUpdateForm";
+import AddOrUpdateBlogForm from "../forms/AddOrUpdateBlogForm";
 import PopupModal from "./Popup";
 
 const AddOrUpdateBlogModal = ({ isOpen, setIsOpen, action, existedBlog }) => {
@@ -20,7 +20,7 @@ const AddOrUpdateBlogModal = ({ isOpen, setIsOpen, action, existedBlog }) => {
         className="AddOrUpdateBlogModal"
         isOpen={isOpen}
       >
-        <AddOrUpdateForm
+        <AddOrUpdateBlogForm
           action={action}
           closeModal={() => {
             setIsOpen(false);

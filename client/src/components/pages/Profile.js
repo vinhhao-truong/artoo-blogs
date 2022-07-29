@@ -66,17 +66,12 @@ const ProfileDetail = ({ profile }) => {
             {dateTime.format(new Date(profile.dob), "DD-MM-YYYY")}
           </span>
         </p>
-        <p>
-          <span className="title">@fav_category: </span>
-          <span className="content category">
-            main
-            <br />
-            sub
-            <br />
-            sub
-          </span>
-        </p>
-        <p></p>
+        {profile.bio && (
+          <p>
+            <span className="title">@bio: </span>
+            <span className="content bio">{profile.bio}</span>
+          </p>
+        )}
       </div>
     </div>
   );

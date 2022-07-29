@@ -20,6 +20,7 @@ const userSchema = mongoose.Schema({
     required: true,
   },
   nickname: String,
+  bio: String,
   dob: {
     type: String,
     required: true,

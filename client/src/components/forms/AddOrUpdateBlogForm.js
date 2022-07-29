@@ -15,9 +15,14 @@ import {
   StyledAutoComplete,
 } from "../styled-components/StyledTextField";
 import StyledForm from "../styled-components/StyledForm";
-import PopupModal from "../modals/Popup";
 
-const AddOrUpdateForm = ({ closeModal, action, existedBlog, setIsPopupOpen, setPopupMsg }) => {
+const AddOrUpdateBlogForm = ({
+  closeModal,
+  action,
+  existedBlog,
+  setIsPopupOpen,
+  setPopupMsg,
+}) => {
   const myProfile = useSelector(selectMyProfile);
   const dispatch = useDispatch();
 
@@ -66,7 +71,10 @@ const AddOrUpdateForm = ({ closeModal, action, existedBlog, setIsPopupOpen, setP
       ...newBlog,
       title: newBlog.title.trim(),
       content: newBlog.content.trim(),
-      artType: newBlog.artType.length > 0 ? newBlog.artType.toLowerCase().trim() : "uncategorized",
+      artType:
+        newBlog.artType.length > 0
+          ? newBlog.artType.toLowerCase().trim()
+          : "uncategorized",
     };
 
     try {
@@ -93,7 +101,7 @@ const AddOrUpdateForm = ({ closeModal, action, existedBlog, setIsPopupOpen, setP
             },
           })
         );
-        setPopupMsg(`${submittedBlog.title} Updated!`)
+        setPopupMsg(`${submittedBlog.title} Updated!`);
       }
       setIsPopupOpen(true);
       closeModal();
@@ -173,4 +181,4 @@ const AddOrUpdateForm = ({ closeModal, action, existedBlog, setIsPopupOpen, setP
   );
 };
 
-export default AddOrUpdateForm;
+export default AddOrUpdateBlogForm;

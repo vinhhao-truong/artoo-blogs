@@ -86,7 +86,7 @@
       .main {
         width: 90%;
         @include flexAll(center, flex-start, column);
-        
+
         p {
           width: 100%;
           line-height: 32px;
@@ -101,7 +101,10 @@
           .content {
             margin-left: 2rem;
           }
-          
+          .bio {
+            white-space: pre-wrap; //to display new line if needed
+            overflow: auto;
+          }
         }
       }
     }

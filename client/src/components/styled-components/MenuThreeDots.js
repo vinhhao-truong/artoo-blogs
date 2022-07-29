@@ -7,12 +7,13 @@ import { BsThreeDots } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteBlog, selectMyProfile } from "../store/user/myProfile-slice";
 import AddOrUpdateModal from "../modals/AddOrUpdateBlogModal";
-import {getFrontURL} from "../fns/getURLPath";
+import { getFrontURL } from "../fns/getURLPath";
 import PopupModal from "../modals/Popup";
+import UpdateProfileModal from "../modals/UpdateProfileModal";
 
 const ProfileMenu = ({ profile }) => {
   const [isCopiedModalOpen, setIsCopiedModalOpen] = useState(false);
-  const [updateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
 
   const myProfile = useSelector(selectMyProfile);
 
@@ -28,7 +29,9 @@ const ProfileMenu = ({ profile }) => {
     },
     {
       name: "Edit",
-      onClick: () => {},
+      onClick: () => {
+        setIsUpdateModalOpen(true);
+      },
     },
   ];
   const otherProfileItems = [
@@ -60,12 +63,20 @@ const ProfileMenu = ({ profile }) => {
           </MenuItem>
         ))}
       </Menu>
-      <PopupModal
-        isOpen={isCopiedModalOpen}
-        setIsOpen={setIsCopiedModalOpen}
-        msg="The Profile URL Copied!"
-        action="copy"
-      />
+      {isCopiedModalOpen && (
+        <PopupModal
+          isOpen={isCopiedModalOpen}
+          setIsOpen={setIsCopiedModalOpen}
+          msg="The Profile URL Copied!"
+          action="copy"
+        />
+      )}
+      {isUpdateModalOpen && (
+        <UpdateProfileModal
+          isOpen={isUpdateModalOpen}
+          setIsOpen={setIsUpdateModalOpen}
+        />
+      )}
     </>
   );
 };

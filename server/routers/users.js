@@ -23,6 +23,26 @@ usersRouter
     } catch (err) {
       console.log(err);
     }
+  }).patch((req, res) => {
+    try {
+      if(req.body) {
+        const newProfile = req.body.newProfile;
+        UserModel.findByIdAndUpdate(newProfile._id, {
+          $set: newProfile
+        }, {
+          overwrite: true
+        }, (queryErr) => {
+          if(!queryErr) {
+            res.send(returnedData("Profile Updated!"))
+          } else {
+            console.log(queryErr)
+          }
+        })
+      }
+      console.log("Profile updated of error (if have above)")
+    } catch(err) {
+      console.log(err)
+    }
   });
 
 usersRouter.route("/:uid").get((req, res) => {

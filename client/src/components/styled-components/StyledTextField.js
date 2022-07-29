@@ -185,6 +185,7 @@ const DateField = (props) => {
               error={false}
               helperText={null}
               fullWidth
+              value={props.value}
             />
             {props.error.isErr && (
               <FormHelperText error={props.error.isErr}>

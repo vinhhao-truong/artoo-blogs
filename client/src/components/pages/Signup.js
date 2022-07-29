@@ -21,6 +21,7 @@ const Signup = () => {
       nickname: "",
       dob: "",
       pickedColor: "#3aafa9",
+      bio: ""
     },
     account: {
       email: "",
@@ -126,6 +127,7 @@ const Signup = () => {
             firstName: account.profile.firstName,
             lastName: account.profile.lastName,
             nickname: account.profile.nickname,
+            bio: account.profile.bio,
             dob: account.profile.dob.toISOString(),
             pickedColor: account.profile.pickedColor
           },
@@ -285,7 +287,6 @@ const Signup = () => {
             onChange={handleTFChange({ type: "profile", prop: "nickname" })}
             value={account.profile.nickname}
             label="Nickname (optional)"
-            error={false}
           />
           <div className="color-field">
             <p>Set your profile color: </p>
