@@ -8,6 +8,9 @@ const mongoose = require("mongoose");
 const userRouter = require(`${__dirname}/routers/users`);
 const blogRouter = require(`${__dirname}/routers/blogs`);
 
+//import fns
+// const getUrl = require(`${__dirname}/fns/getURLPath`)
+
 const app = express();
 
 app.use(express.json());
@@ -16,8 +19,8 @@ app.use(cors());
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST"],
+    origin: "*",
+    methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
   },
 });
 

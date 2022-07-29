@@ -11,7 +11,8 @@ import { BsThreeDots } from "react-icons/bs";
 
 import useGETFetch from "../hooks/useFetch";
 import LoadingBar from "react-top-loading-bar";
-import { timeDiffFromNow } from "../funcs/formatTime";
+import { timeDiffFromNow } from "../fns/formatTime";
+import upperFirstLetter from "../fns/upperFirstLetter";
 
 const ThisBlog = ({ owner, blog }) => {
   return (
@@ -34,7 +35,10 @@ const ThisBlog = ({ owner, blog }) => {
         >
           {owner.nickname ? owner.nickname : owner.firstName}
         </Link>
-        <p>{timeDiffFromNow(blog.uploadTime)}</p>
+        <div className="header-right">
+          <p className="upload-time">{timeDiffFromNow(blog.uploadTime)}</p>
+          <p className="art-type">@_{blog.artType}</p>
+        </div>
       </div>
       <div className="detail">
         <h2>{blog.title}</h2>

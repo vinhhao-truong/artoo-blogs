@@ -1,31 +1,32 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&display=swap');
-@import './scss/variables';
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&display=swap");
+@import "./scss/variables";
 //Layout
-@import './scss/layout/navigation';
-@import './scss/layout/mobile-sub-nav';
+@import "./scss/layout/navigation";
+@import "./scss/layout/mobile-sub-nav";
 
 //Fragments
-@import './scss/fragments/blog';
-@import './scss/fragments/profile-title';
-@import './scss/fragments/add-blog-btn';
+@import "./scss/fragments/blog";
+@import "./scss/fragments/profile-title";
+@import "./scss/fragments/add-blog-btn";
+@import "./scss/fragments/type-filter";
 
 //Pages
-@import './scss/pages/newsfeed';
-@import './scss/pages/login';
-@import './scss/pages/landing';
-@import './scss/pages/signup';
-@import './scss/pages/profile';
+@import "./scss/pages/newsfeed";
+@import "./scss/pages/login";
+@import "./scss/pages/landing";
+@import "./scss/pages/signup";
+@import "./scss/pages/profile";
 @import "./scss/pages/blog-detail";
 
 //Modals
-@import './scss/modals/react-modal';
-@import './scss/modals/add-update-modal';
-@import './scss/modals/loading-modal';
-@import './scss/modals/alert-modal';
-@import './scss/modals/popup-modal';
+@import "./scss/modals/react-modal";
+@import "./scss/modals/add-update-blog";
+@import "./scss/modals/loading-modal";
+@import "./scss/modals/alert-modal";
+@import "./scss/modals/popup-modal";
 
 //Styled Components
-@import './scss/styled-components/menu-3dots';
+@import "./scss/styled-components/menu-3dots";
 
 * {
   margin: 0;
@@ -34,12 +35,14 @@
 }
 
 body {
-  font-family: 'Nunito Sans', sans-serif;
+  min-height: 100%;
+  font-family: "Nunito Sans", sans-serif;
   font-weight: 400;
   background-color: $light-grey;
-  color: #000000;   
+  color: #000000;
   padding-bottom: 2rem;
   overflow-y: scroll;
+  behavior: smooth;
   &::-webkit-scrollbar {
     width: 0.3rem;
   }

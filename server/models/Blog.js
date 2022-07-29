@@ -13,9 +13,8 @@ const blogSchema = mongoose.Schema({
     type: String,
     required: true
   },
-  category: {
+  artType: {
     type: String,
-    enum: ["Literature", "Painting", "Music", "Movie", ""]
   },
   title: {
     type: String,

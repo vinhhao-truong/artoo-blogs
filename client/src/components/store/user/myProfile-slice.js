@@ -28,7 +28,7 @@ const myProfileSlice = createSlice({
     },
     updateBlog: (state, action) => {
       const myBlogsRemovedById = state.myBlogs.filter(blog => blog._id !== action.payload.updatedBlog._id);
-      return { ...state, myBlogs: myBlogsRemovedById.concat(action.payload.updatedBlog) }
+      return { ...state, myBlogs: [...myBlogsRemovedById, action.payload.updatedBlog] }
     }
   }
 

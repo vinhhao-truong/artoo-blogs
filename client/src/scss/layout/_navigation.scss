@@ -7,9 +7,11 @@
   height: 3rem;
   // border-bottom: solid 1px;
   background-color: $white;
+  position: -webkit-sticky;
   position: sticky;
   border-bottom: 2px solid $light-grey;
   top: 0;
+  left: 0;
   z-index: 1;
   &__Logo {
     a {
@@ -38,7 +40,7 @@
         line-height: 3rem;
         display: inline-block;
         text-decoration: none;
-        padding: 0 7rem;
+        padding: 0 2rem;
         color: $light-green;
         &:hover {
           background-color: rgba(aliceblue, 0.1);

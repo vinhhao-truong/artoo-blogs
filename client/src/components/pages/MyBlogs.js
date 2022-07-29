@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { selectMyProfile } from "../store/user/myProfile-slice";
 
 import AddBlogBtn from "../styled-components/AddBlogBtn";
-import AddOrUpdateModal from "../modals/AddOrUpdateModal";
+import AddOrUpdateModal from "../modals/AddOrUpdateBlogModal";
 
 import FetchedBlogList from "../fragments/FetchedBlogList";
 

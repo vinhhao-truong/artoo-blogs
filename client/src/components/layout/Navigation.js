@@ -44,6 +44,7 @@ const SideProfile = forwardRef((props, ref) => {
       ref={ref}
       className="Navigation__SideProfile pickedColor-hover"
       onMouseEnter={props.onMouseEnter}
+      onMouseLeave={props.onMouseLeave}
       onClick={handleSideProfileClick}
     >
       {props.children}
@@ -93,6 +94,7 @@ const PrivateNav = ({ isMobileOrTablet }) => {
         onMouseEnter={() => {
           setSideProfileIsOpened(true);
         }}
+        onMouseLeave={() => setSideProfileIsOpened(false)}
       >
         {!isMobileOrTablet && (
           <p>
@@ -111,6 +113,9 @@ const PrivateNav = ({ isMobileOrTablet }) => {
       <ControlledMenu
         state={sideProfileIsOpened ? "open" : "closed"}
         anchorRef={sideProfileRef}
+        onMouseEnter={() => {
+          setSideProfileIsOpened(true);
+        }}
         onMouseLeave={() => setSideProfileIsOpened(false)}
         onClose={() => setSideProfileIsOpened(false)}
         align="end"
