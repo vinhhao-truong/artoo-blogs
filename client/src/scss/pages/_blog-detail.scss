@@ -1,0 +1,62 @@
+@import "../variables";
+
+.BlogDetail {
+  @include flexAll(center, flex-start);
+  width: 100%;
+  &__blog {
+    position: relative;
+    border-radius: 10px;
+    min-height: 15rem;
+    margin-top: 1rem;
+    padding: 2rem 3.3rem;
+    width: 70rem;
+    max-width: 80%;
+    background-color: $white;
+    .menu {
+      position: absolute;
+      top: 0.8rem;
+      right: 1.5rem;
+    }
+    .color-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0.5rem;
+      border-top-left-radius: 10px;
+      border-bottom-left-radius: 10px;
+    }
+    .img {
+      position: absolute;
+      left: -2.25rem;
+      width: 5rem;
+      height: 5rem;
+      background-color: grey;
+      border-radius: 50%;
+    }
+    .header {
+      height: 5rem;
+      @include flexAll(space-between);
+      a{
+        text-decoration: none;
+        font-size: 32px;
+        font-weight: 700;
+        &:hover {
+          filter: brightness(80%);
+        }
+      }
+      .header-right {
+        .upload-time{
+          font-style: italic;
+          color: $grey !important;
+        }
+      }
+
+    }
+    .detail {
+      h2 {
+        text-align: center;
+      }
+    }
+  }
+}

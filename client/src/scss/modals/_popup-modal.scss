@@ -1,0 +1,43 @@
+@import "../variables";
+
+.PopupModal {
+  position: absolute;
+  bottom: 2rem;
+  @include flexAll();
+  animation-name: open-modal;
+  animation-fill-mode: forwards;
+  animation-duration: 1.2s;
+  @keyframes open-modal {
+    0% {
+      bottom: -2rem;
+      opacity: 20%;
+    }
+    30% {
+      bottom: 2rem;
+      opacity: 100%;
+    }
+    65% {
+      opacity: 100%;
+    }
+    100% {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+  .PopupContent {
+    z-index: 1;
+    min-width: 15rem;
+    min-height: 1.5rem;
+    border-radius: 15px;
+    color: $white;
+    @include flexAll(center);
+    svg {
+      width: 3rem;
+      height: 3rem;
+    }
+    & > * {
+      z-index: 2;
+      padding: 0 1rem;
+    }
+  }
+}

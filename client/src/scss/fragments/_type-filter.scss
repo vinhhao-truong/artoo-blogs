@@ -1,0 +1,45 @@
+@import "../variables";
+
+.TypeFilter {
+  position: fixed;
+  width: 1.2rem;
+  height: 4rem;
+  top: 50%;
+  left: 1rem;
+  .FilterBtn {
+    border: none;
+    border-radius: 10px;
+    background-color: aqua;
+    height: 100%;
+    svg {
+      color: $white;
+      width: 100%;
+      height: 100%;
+      transform: scale(1.5);
+    }
+    &:hover {
+      filter: brightness(90%);
+    }
+    animation-name: up-down;
+    animation-duration: 1.5s;
+    animation-delay: none;
+    animation-iteration-count: infinite;
+    @keyframes up-down {
+      50% {
+        transform: translateY(-5px);
+      }
+      100% {
+        transform: translate(0);
+      }
+    }
+  }
+  .menu {
+    ul {
+      .loading {
+        display: block;
+        margin: 0 auto;
+        padding: 5rem 0;
+      }
+    }
+  }
+}

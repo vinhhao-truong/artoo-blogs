@@ -1,0 +1,109 @@
+@import "../variables";
+
+.Profile {
+  margin: 0 auto;
+  @include flexAll(space-evenly, flex-start);
+  max-width: 100rem;
+
+  .EmptyList {
+    margin-top: 10rem;
+    @include flexAll(center, center, column);
+    img {
+      width: 20rem;
+    }
+  }
+
+  &__profile {
+    position: sticky;
+    width: 30rem;
+    top: 0;
+    &__detail {
+      padding: 10rem 1rem 5rem;
+      background-color: $white;
+      border-radius: 10px;
+      box-shadow: 10px 8px 6px rgba(#000000, 0.02);
+      position: relative;
+      top: 10rem;
+      width: 100%;
+      @include flexAll();
+      .menu {
+        position: absolute;
+        top: 1.2rem;
+        left: 1rem;
+      }
+      .theme-color-top {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 20%;
+        height: 0.3rem;
+        border-top-right-radius: 10px;
+      }
+      .theme-color-bot {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 20%;
+        height: 0.3rem;
+        border-bottom-left-radius: 10px;
+      }
+      .theme-color-left {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 0.3rem;
+        height: 20%;
+        border-top-right-radius: 10px;
+      }
+      .theme-color-right {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0.3rem;
+        height: 20%;
+        border-bottom-left-radius: 10px;
+      }
+      .top {
+        position: absolute;
+        top: -5.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+        @include flexAll(center, center, column);
+
+        .img {
+          border-radius: 50%;
+          background-color: $grey;
+          width: 168px;
+          height: 168px;
+          cursor: pointer;
+          margin-bottom: 0.8rem;
+        }
+        .displayName {
+          font-weight: 800;
+          font-size: 28px;
+        }
+      }
+      .main {
+        width: 90%;
+        @include flexAll(center, flex-start, column);
+        
+        p {
+          width: 100%;
+          line-height: 32px;
+          position: relative;
+          display: flex;
+          padding: 0 0.5rem;
+          .title {
+            font-style: italic;
+            color: $grey;
+            width: 6rem;
+          }
+          .content {
+            margin-left: 2rem;
+          }
+          
+        }
+      }
+    }
+  }
+}

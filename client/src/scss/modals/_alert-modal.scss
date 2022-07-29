@@ -1,0 +1,42 @@
+@import "../variables";
+
+.AlertModal {
+  width: 25rem;
+  outline: none;
+  .AlertContent {
+    position: relative;
+    padding: 1rem 0;
+    width: 100%;
+    height: 100%;
+    @include flexAll(flex-start, center, column);
+    & > * {
+      margin: 0.8rem 0;
+    }
+    img {
+      padding: 0;
+      width: 7rem;
+      height: 7rem;
+    }
+    p {
+      text-align: center;
+      max-width: 60%;
+    }
+    .btn-group {
+      width: 100%;
+      @include flexAll(space-around);
+      button {
+        background-color: $light-grey;
+        color: $white;
+        width: 8rem;
+        height: 2.5rem;
+        border: none;
+        outline: none;
+        border-radius: 50px;
+        cursor: pointer;
+        &:hover {
+          filter: brightness(80%);
+        }
+      }
+    }
+  }
+}
