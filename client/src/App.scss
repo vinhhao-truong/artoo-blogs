@@ -17,6 +17,8 @@
 @import "./scss/pages/signup";
 @import "./scss/pages/profile";
 @import "./scss/pages/blog-detail";
+@import "./scss/pages/forgot-pw";
+@import "./scss/pages/account";
 
 //Modals
 @import "./scss/modals/react-modal";
@@ -37,9 +39,10 @@
 
 body {
   min-height: 100%;
+  width: 100vw !important;
   font-family: "Nunito Sans", sans-serif;
   font-weight: 400;
-  background-color: $light-grey;
+  background-color: $light-grey !important;
   color: #000000;
   padding-bottom: 2rem;
   overflow-y: scroll;

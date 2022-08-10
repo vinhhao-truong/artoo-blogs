@@ -1,27 +1,36 @@
 import hexToRgba from "hex-to-rgba";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+
 import ReactModal from "react-modal";
 import { FaCopy } from "react-icons/fa";
-import { RiFileAddFill, RiFileEditFill } from "react-icons/ri";
+import { RiFileAddFill, RiFileEditFill,RiDeleteBin5Fill } from "react-icons/ri";
+import {CgProfile} from "react-icons/cg"
+import {MdOutlineMarkEmailRead} from "react-icons/md"
 
-import { selectMyProfile } from "../store/user/myProfile-slice";
+import { selectMyProfile } from "../../store/user/myProfile-slice";
+import { selectFeatures, triggerPopup } from "../../store/user/features-slice";
 
-const PopupModal = ({ msg, action, isOpen, setIsOpen }) => {
+const PopupModal = () => {
   const myProfile = useSelector(selectMyProfile);
+  const features = useSelector(selectFeatures);
+  const dispatch = useDispatch();
 
   const handleAfterOpen = () => {
     setTimeout(() => {
-      setIsOpen(false);
-    }, 1200);
+      dispatch(triggerPopup({
+        msg: "",
+        action: ""
+      }))
+    }, 2000);
   };
   return (
     <>
-      {isOpen && (
+      {features.popup.isOpen && (
         <ReactModal
           className="PopupModal"
           onAfterOpen={handleAfterOpen}
           overlayClassName="PopupOverlay"
-          isOpen={isOpen}
+          isOpen={features.popup.isOpen}
         >
           <div
             style={{
@@ -29,11 +38,14 @@ const PopupModal = ({ msg, action, isOpen, setIsOpen }) => {
             }}
             className="PopupContent"
           >
-            {action === "copy" && <FaCopy />}
-            {action === "add" && <RiFileAddFill />}
-            {action === "update" && <RiFileEditFill />}
-            {action === "update profile"}
-            <p>{msg}</p>
+            {features.popup.action === "copy" && <FaCopy />}
+            {features.popup.action === "add" && <RiFileAddFill />}
+            {features.popup.action === "update" && <RiFileEditFill />}
+            {features.popup.action === "update profile" && <CgProfile />}
+            {features.popup.action === "delete" && <RiDeleteBin5Fill />}
+            {features.popup.action === "email sent" && <MdOutlineMarkEmailRead />}
+
+            <p>{features.popup.msg}</p>
           </div>
         </ReactModal>
       )}

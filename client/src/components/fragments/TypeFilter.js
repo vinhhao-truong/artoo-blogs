@@ -5,9 +5,9 @@ import ReactLoading from "react-loading";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import { useSelector } from "react-redux";
-import { selectMyProfile } from "../store/user/myProfile-slice";
+import { selectMyProfile } from "../../store/user/myProfile-slice";
 
-import upperFirstLetter from "../fns/upperFirstLetter";
+import upperFirstLetter from "../../fns/upperFirstLetter";
 
 const TypeFilter = ({ typeList }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

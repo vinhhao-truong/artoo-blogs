@@ -16,7 +16,7 @@ $min-lgScreen: 1201px;
 
 //Mixins
 @mixin flexAll($justify: center, $align: center, $dir: row) {
-  display: flex;
+  display: flex !important;
   flex-direction: $dir;
   justify-content: $justify;
   align-items: $align;

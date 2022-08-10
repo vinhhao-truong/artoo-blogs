@@ -1,8 +1,8 @@
 import React from "react";
-import useResponsive from "../hooks/useResponsive";
+import useResponsive from "../../hooks/useResponsive";
 import { Link } from "react-router-dom";
-import { BiNews, BiHomeHeart } from "react-icons/bi";
-import { selectMyProfile } from "../store/user/myProfile-slice";
+import { BiNews, BiHomeSmile } from "react-icons/bi";
+import { selectMyProfile } from "../../store/user/myProfile-slice";
 import { useSelector } from "react-redux";
 
 const NavMain = (props) => {
@@ -30,10 +30,10 @@ const MobileSubNav = ({ isLoggedIn }) => {
     {
       logo: BiNews,
       title: "News Feed",
-      path: "/news-feed",
+      path: "/",
     },
     {
-      logo: BiHomeHeart,
+      logo: BiHomeSmile,
       title: "My Blogs",
       path: "/my-blogs",
     },

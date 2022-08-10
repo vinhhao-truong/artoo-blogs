@@ -1,8 +1,11 @@
+const path = require('path');
 const blogRouter = require("express").Router();
-const handleFind = require("../controller/handleFind");
-const { BlogModel } = require("../models/Blog");
 
-const returnedData = (msg, data) => ({ message: msg, data: data });
+const handleFind = require(path.join(__dirname, "../fns/handleFind"));
+const response = require(path.join(__dirname, "../fns/response"));
+
+const { BlogModel } = require(path.join(__dirname, "../models/Blog"));
+
 
 const logErrQuery = (err) => {
   if (err) {
@@ -27,7 +30,7 @@ blogRouter
         //Save to overall blogs db
         newBlog.save((queryErr) => {
           if (!queryErr) {
-            res.send(returnedData("The blog created successfully!", null));
+            res.send(response("The blog created successfully!", null));
             console.log("The new blog saved successfully!");
           } else {
             console.log(queryErr);
@@ -44,7 +47,7 @@ blogRouter
       BlogModel.deleteOne({ _id: req.body._id }, (queryErr) => {
         if (!queryErr) {
           res.send(
-            returnedData("The blog has been deleted from the database!", null)
+            response("The blog has been deleted from the database!", null)
           );
         } else {
           res.send(queryErr);
@@ -64,7 +67,7 @@ blogRouter
         },
         logErrQuery
       );
-      res.send(returnedData("The post updated!", null));
+      res.send(response("The post updated!", null));
       console.log("The blog is updated or error occurred (if have above)!");
     } catch (err) {
       console.log(err);
@@ -88,7 +91,7 @@ blogRouter.route("/filter/:resData").get((req, res) => {
                 filteredTypeList.push(type);
               }
             }
-            res.send(returnedData("Type list found!", [...filteredTypeList]));
+            res.send(response("Type list found!", [...filteredTypeList]));
           } else {
             console.log(findErr);
           }

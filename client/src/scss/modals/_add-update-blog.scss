@@ -5,6 +5,7 @@
   min-height: 20rem;
   max-width: 95%;
   outline: none;
+  overflow-y: auto;
   .AddOrUpdateForm {
     @include flexAll(flex-start, flex-start, column);
     position: relative;
@@ -26,8 +27,42 @@
         width: calc(50% - 0.2rem);
       }
     }
-    .contentTF {
+    .images {
       margin-bottom: 6rem;
+      width: 100%;
+      @include flexAll(flex-start);
+      flex-wrap: wrap;
+      & > * {
+        width: 31%;
+        margin: 0.4rem;
+        height: 6rem;
+        border-radius: 10px;
+
+      }
+      .uploadBtn, .more {
+        @include flexAll(center, center, column);
+        background-color: $light-grey;
+        position: relative;
+        svg {
+          width: 40%;
+          height: 40%;
+        }
+        input {
+          position: absolute;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 1;
+          opacity: 0;
+          cursor: pointer;
+          &::-webkit-file-upload-button {
+            display: none;
+          }
+        }
+        &:hover {
+          filter: brightness(90%);
+        }
+      }
     }
     .submit-btn {
       align-self: center ;

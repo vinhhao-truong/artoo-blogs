@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { selectMyProfile } from "../store/user/myProfile-slice";
+import { selectMyProfile } from "../../store/user/myProfile-slice";
 import styled from "styled-components";
 
 const Form = styled.form`

@@ -16,8 +16,9 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Stack from "@mui/material/Stack";
 import enLocale from "date-fns/locale/en-GB";
 import Autocomplete from "@mui/material/Autocomplete";
+import CircularProgress from '@mui/material/CircularProgress';
 
-import useAuthColor from "../hooks/useAuthColor";
+import useAuthColor from "../../hooks/useAuthColor";
 
 const StyledOutlinedTF = styleMUI(TextField)(() => {
   const pickedColor = useAuthColor();
@@ -89,6 +90,7 @@ const PasswordField = forwardRef((props, ref) => {
       className="password-field"
       variant="outlined"
       fullWidth
+      size={props.size}
     >
       <InputLabel htmlFor="outlined-adornment-password">
         {props.label}
@@ -112,6 +114,7 @@ const PasswordField = forwardRef((props, ref) => {
         }
         label="Password"
         required={props.required}
+        autoFocus={props.autoFocus}
       />
       {props.error.isErr && (
         <FormHelperText error={props.error.isErr}>
@@ -142,6 +145,7 @@ const TxtField = forwardRef((props, ref) => {
       size={props.size}
       autoFocus={props.autoFocus}
       onFocus={props.onFocus}
+      maxRows={props.maxRows}
     />
   );
 });
@@ -150,6 +154,7 @@ const StyledAutoComplete = (props) => {
   const classes = props.className ? props.className : "";
   return (
     <Autocomplete
+      filterOptions={props.filterOptions}
       onSelect={props.onChange}
       className={"autocomplete " + classes}
       fullWidth={props.fullWidth}
@@ -165,6 +170,71 @@ const StyledAutoComplete = (props) => {
     />
   );
 };
+
+const StyledAutoCompleteSearch = (props) => {
+  const [open, setOpen] = React.useState(false);
+  const [options, setOptions] = React.useState([]);
+  const loading = open && options.length === 0;
+
+  React.useEffect(() => {
+    let active = true;
+
+    if (!loading) {
+      return undefined;
+    }
+
+    (async () => {
+      // await sleep(1e3); // For demo purposes.
+
+      if (active) {
+        setOptions([...props.options]);
+      }
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [loading]);
+
+  React.useEffect(() => {
+    if (!open) {
+      setOptions([]);
+    }
+  }, [open]);
+
+  return (
+    <Autocomplete
+      id="asynchronous-demo"
+      sx={{ width: 300 }}
+      open={open}
+      onOpen={() => {
+        setOpen(true);
+      }}
+      onClose={() => {
+        setOpen(false);
+      }}
+      isOptionEqualToValue={(option, value) => option.title === value.title}
+      getOptionLabel={(option) => option.title}
+      options={options}
+      loading={loading}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label="Asynchronous"
+          InputProps={{
+            ...params.InputProps,
+            endAdornment: (
+              <React.Fragment>
+                {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                {params.InputProps.endAdornment}
+              </React.Fragment>
+            ),
+          }}
+        />
+      )}
+    />
+  );
+}
 
 const DateField = (props) => {
   return (
@@ -186,6 +256,7 @@ const DateField = (props) => {
               helperText={null}
               fullWidth
               value={props.value}
+              size={props.size}
             />
             {props.error.isErr && (
               <FormHelperText error={props.error.isErr}>

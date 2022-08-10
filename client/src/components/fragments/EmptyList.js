@@ -1,4 +1,4 @@
-import coffeeImg from "../img/coffee.png";
+import coffeeImg from "../../img/coffee.png";
 
 const EmptyList = ({msg}) => {
   return (

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import useAuthColor from "../hooks/useAuthColor";
+import useAuthColor from "../../hooks/useAuthColor";
 
 const Styled = styled.div`
 

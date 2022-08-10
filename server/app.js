@@ -34,18 +34,14 @@ mongoose.connect(
 app.use("/users", userRouter);
 app.use("/blogs", blogRouter);
 
-io.on("connection", (socket) => {
-  socket.on("msg", data => {
-    console.log(data)
-  })
-});
 
-io.on("send_msg", (name) => {
-  console.log(name)
-  io.on("msg", (data) => {
-    console.log(data);
+io.on("connection", (socket) => {
+  console.log(socket.id)
+  socket.on("send_msg", msg => {
+    console.log(msg)
   });
 });
+
 
 
 

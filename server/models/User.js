@@ -7,6 +7,10 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  idToken: {
+    type: String,
+    required: true
+  },
   email: {
     type: String,
     required: true,
@@ -29,6 +33,10 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  profileImg: {
+    type: String,
+    required: true
+  }
 });
 
 const UserModel = mongoose.model("User", userSchema);

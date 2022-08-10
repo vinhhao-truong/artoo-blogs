@@ -6,13 +6,13 @@
   @include flexAll();
   animation-name: open-modal;
   animation-fill-mode: forwards;
-  animation-duration: 1.2s;
+  animation-duration: 2s;
   @keyframes open-modal {
     0% {
       bottom: -2rem;
       opacity: 20%;
     }
-    30% {
+    20% {
       bottom: 2rem;
       opacity: 100%;
     }
@@ -38,6 +38,9 @@
     & > * {
       z-index: 2;
       padding: 0 1rem;
+    }
+    p {
+      transform: translateY(25%);
     }
   }
 }

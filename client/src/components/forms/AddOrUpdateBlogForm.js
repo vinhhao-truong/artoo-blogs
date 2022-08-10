@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
@@ -8,21 +8,27 @@ import {
   selectMyProfile,
   addBlog,
   updateBlog,
-} from "../store/user/myProfile-slice";
+} from "../../store/user/myProfile-slice";
 
 import {
   TxtField,
   StyledAutoComplete,
 } from "../styled-components/StyledTextField";
 import StyledForm from "../styled-components/StyledForm";
+import {
+  startLoading,
+  stopLoading,
+  triggerPopup,
+} from "../../store/user/features-slice";
 
-const AddOrUpdateBlogForm = ({
-  closeModal,
-  action,
-  existedBlog,
-  setIsPopupOpen,
-  setPopupMsg,
-}) => {
+import { getBackURL } from "../../fns/getURLPath";
+
+import { BiImageAdd } from "react-icons/bi";
+
+import { firebaseStorage } from "../../store/firebase";
+import { uploadBytes, ref, getDownloadURL, listAll } from "firebase/storage";
+
+const AddOrUpdateBlogForm = ({ closeModal, action, existedBlog }) => {
   const myProfile = useSelector(selectMyProfile);
   const dispatch = useDispatch();
 
@@ -35,6 +41,7 @@ const AddOrUpdateBlogForm = ({
     artType: "",
     reactions: [],
     comments: [],
+    images: [],
   };
 
   const initialBlog = action === "add" ? { ...blankBlog } : { ...existedBlog };
@@ -65,8 +72,29 @@ const AddOrUpdateBlogForm = ({
     },
   ].sort();
 
+  const [imgList, setImgList] = useState([]);
+  const [imgPreviewList, setImgPreviewList] = useState([]);
+  const [selectedImg, setSelectedImg] = useState(null);
+
+  useEffect(() => {
+    if (!selectedImg) {
+      return;
+    } else {
+      setImgList((prev) => [...prev, selectedImg]);
+    }
+
+    if (imgList.length <= 4) {
+      const objectUrl = URL.createObjectURL(selectedImg);
+      setImgPreviewList((prev) => [...prev, objectUrl]);
+
+      // free memory when ever this component is unmounted
+      return () => URL.revokeObjectURL(objectUrl);
+    }
+  }, [selectedImg]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const submittedBlog = await {
       ...newBlog,
       title: newBlog.title.trim(),
@@ -77,17 +105,51 @@ const AddOrUpdateBlogForm = ({
           : "uncategorized",
     };
 
+    dispatch(startLoading());
     try {
       if (action === "add") {
-        await axios.post("http://localhost:3001/blogs/", {
-          newBlog: { ...submittedBlog, uploadTime: new Date().toISOString() },
+        const uploadedImgUrl = [];
+        for (let i = 1; i <= imgList.length; i++) {
+          const imgRef = ref(
+            firebaseStorage,
+            `images/blogs/${newBlog._id}/${i}`
+          );
+          const uploadedImg = await uploadBytes(imgRef, imgList[i - 1]);
+          const uploadedUrl = (await getDownloadURL(uploadedImg.ref)).slice();
+          uploadedImgUrl.push(uploadedUrl);
+        }
+        // const imgFolderRef = ref(firebaseStorage, `images/blogs/${newBlog._id}`);
+        // const uploadedImgList = await listAll(imgFolderRef);
+        // uploadedImgList.items.forEach(img => {
+        //   uploadedImgUrl.push(getDownloadURL(img));
+        // })
+
+        await axios.post(`${getBackURL("/blogs")}`, {
+          newBlog: {
+            ...submittedBlog,
+            uploadTime: new Date().toISOString(),
+            images: [...uploadedImgUrl],
+          },
         });
-        dispatch(addBlog({ newBlog: submittedBlog }));
-        setPopupMsg(`${submittedBlog.title} Added!`);
+        dispatch(
+          addBlog({
+            newBlog: {
+              ...submittedBlog,
+              uploadTime: new Date().toISOString(),
+              images: [...uploadedImgUrl],
+            },
+          })
+        );
+        dispatch(
+          triggerPopup({
+            action: "add",
+            msg: `${newBlog.title} posted!`,
+          })
+        );
         setNewBlog(initialBlog);
       }
       if (action === "update") {
-        await axios.patch("http://localhost:3001/blogs", {
+        await axios.patch(`${getBackURL("/blogs")}`, {
           updatedBlog: {
             ...submittedBlog,
             uploadTime: new Date().toISOString(),
@@ -101,13 +163,17 @@ const AddOrUpdateBlogForm = ({
             },
           })
         );
-        setPopupMsg(`${submittedBlog.title} Updated!`);
+        dispatch(
+          triggerPopup({
+            action: "update",
+            msg: `${newBlog.title} updated!`,
+          })
+        );
       }
-      setIsPopupOpen(true);
-      closeModal();
     } catch (err) {
       console.log(err);
     }
+    dispatch(stopLoading());
     closeModal();
   };
 
@@ -119,6 +185,15 @@ const AddOrUpdateBlogForm = ({
   const handleTFFocus = (e) => {
     //Always focus at the end
     e.target.setSelectionRange(e.target.value.length, e.target.value.length);
+  };
+
+  const handleSelectedImg = (e) => {
+    if (!e.target.files || e.target.files.length === 0) {
+      return;
+    }
+
+    //Using the first image instead of multiple
+    setSelectedImg(e.target.files[0]);
   };
 
   return (
@@ -165,14 +240,36 @@ const AddOrUpdateBlogForm = ({
           size="small"
           label="Content"
           multiline
-          minRows={6}
+          minRows={4}
           onChange={handleChange("content")}
           value={newBlog.content}
           required
           fullWidth
           focused={action === "update" ? true : false}
           onFocus={handleTFFocus}
+          maxRows={8}
         />
+        <div className="images">
+          {imgPreviewList.map((imgUrl, idx) => (
+            <img
+              className="img-preview"
+              key={idx}
+              src={imgUrl}
+              alt={`preview-${idx}`}
+            />
+          ))}
+          {imgList.length > 4 && <div className="more">...</div>}
+          <div style={{ color: myProfile.pickedColor }} className="uploadBtn">
+            <BiImageAdd />
+            <p>Upload Image</p>
+            <input
+              onChange={handleSelectedImg}
+              type="file"
+              name="add-img"
+              id="add-img"
+            />
+          </div>
+        </div>
         <button className="submit-btn">
           {action === "add" ? "Create" : "Update"}
         </button>

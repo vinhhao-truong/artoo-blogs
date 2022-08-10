@@ -2,6 +2,7 @@
 
 .NewsFeed {
   min-height: calc(100vh - 6rem);
+  width: 100%;
   @include flexAll(center, flex-start);
   .BlogList {
     position: relative;

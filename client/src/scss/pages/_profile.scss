@@ -15,6 +15,7 @@
 
   &__profile {
     position: sticky;
+    margin-left: 1rem;
     width: 30rem;
     top: 0;
     &__detail {
@@ -72,11 +73,10 @@
 
         .img {
           border-radius: 50%;
-          background-color: $grey;
           width: 168px;
           height: 168px;
-          cursor: pointer;
           margin-bottom: 0.8rem;
+          cursor: pointer;
         }
         .displayName {
           font-weight: 800;
@@ -89,7 +89,6 @@
 
         p {
           width: 100%;
-          line-height: 32px;
           position: relative;
           display: flex;
           padding: 0 0.5rem;

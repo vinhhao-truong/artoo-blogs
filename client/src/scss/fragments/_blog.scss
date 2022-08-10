@@ -6,15 +6,15 @@
   max-width: 80%;
   .Blog {
     width: 100%;
-    min-height: 20rem;
+    min-height: 12rem;
     margin: 1rem;
     background-color: $white;
     border-radius: 10px;
     box-shadow: 10px 8px 6px rgba(#000000, 0.02);
-    
-    
+
     &__Inner {
       position: relative;
+      overflow-y: auto;
       .head-bar {
         position: absolute;
         top: 0;
@@ -26,11 +26,12 @@
       }
       padding: 1rem;
       &__Header {
-        @include flexAll(space-between);
+        @include flexAll(space-between, center);
         margin-bottom: 1rem;
         .header-right {
           @include flexAll(flex-end);
           .upload-time {
+            transform: translateY(30%);
             margin-right: 1rem;
             font-style: italic;
             color: $grey;
@@ -40,29 +41,34 @@
       &__Body {
         white-space: pre-wrap; //to display new line if needed
         overflow: auto;
-        & > * {
-          margin: 0rem 0 1rem;
-        }
         .body-header {
           width: 100%;
           @include flexAll(space-between);
-          p {
-
-          }
           a {
             // left: 50%;
             // transform: translateX(-50%);
-  
+            color: black;
             display: inline-block;
             text-decoration: none;
-            text-align:right;
+            text-align: right;
             &:hover {
-              filter: brightness(80%);
+              text-decoration: underline;
             }
           }
         }
         p {
-
+          a {
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+      }
+      .images {
+        @include flexAll(center, center);
+        flex-wrap: wrap;
+        & > * {
+          width: 30%;
         }
       }
     }

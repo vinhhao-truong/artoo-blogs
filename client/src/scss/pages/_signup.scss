@@ -3,7 +3,7 @@
 .Signup {
   width: 60%;
   min-height: 40rem;
-  max-width: 30rem;
+  max-width: 32rem;
   display: block;
   margin: 1rem auto;
   border-radius: 20px;
@@ -15,6 +15,7 @@
     position: relative;
     top: 0;
     min-height: 40rem;
+    height: 100%;
     border-radius: 20px;
 
     width: 100%;
@@ -40,7 +41,7 @@
         }
       }
       .color-field {
-        @include flexAll(space-around);
+        @include flexAll(space-between);
         margin-bottom: 0.4rem;
         color: grey;
         
@@ -54,8 +55,6 @@
     }
 
     .submitBtn {
-      position: absolute;
-      bottom: 1.7rem;
       @include styledBtn(7rem, 2rem, 15px);
       align-self: center;
       outline: none;

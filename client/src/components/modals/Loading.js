@@ -1,18 +1,21 @@
 import { useState } from "react";
 import ReactModal from "react-modal";
 import ReactLoading from "react-loading";
+import { useDispatch, useSelector } from "react-redux";
+import { selectFeatures } from "../../store/user/features-slice";
 
-const LoadingModal = ({ isLoading, type }) => {
+const LoadingModal = () => {
+  const features = useSelector(selectFeatures);
 
   return (
     <ReactModal
       overlayClassName="NoneOverlay"
       className="LoadingModal"
-      isOpen={isLoading}
+      isOpen={features.loading}
     >
       <ReactLoading
         className="LoadingIcon"
-        type={type ? type : "spinningBubbles"}
+        type="spinningBubbles"
         height="3rem"
         width="3rem"
       />

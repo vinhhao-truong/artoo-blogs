@@ -2,7 +2,7 @@
 
 .Login {
   width: 60%;
-  min-height: 21.5rem;
+  min-height: 23.6rem;
   max-width: 30rem;
   display: block;
   margin: 1rem auto;
@@ -26,7 +26,12 @@
       @include styledBtn(7rem, 2rem, 15px);
       align-self: center;
       outline: none;
-
+    }
+    a {
+      align-self: center;
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 }

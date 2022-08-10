@@ -1,23 +1,20 @@
-import React, {useEffect} from "react";
+import React, { useEffect, useState } from "react";
 import { RiAddLine } from "react-icons/ri";
-import useResponsive from "../hooks/useResponsive";
-import {io} from "socket.io-client";
+import { io } from "socket.io-client";
 
-const socket = io("http://localhost:3001");
+import { getBackURL } from "../../fns/getURLPath";
+import useResponsive from "../../hooks/useResponsive";
+
 
 const AddBlogBtn = ({ onClick, className }) => {
   const isTabletOrMobile = useResponsive("Tablet or Mobile");
-
-
   
   // const handleClick = (e) => {
-  //   e.preventDefault();
-  //   console.log("click")
-
-  //   socket.io.on("send_msg", () => {
-  //     socket.io.emit("msg", "blah")
-  //   })
-
+  //   // e.preventDefault();
+  //   console.log(getBackURL());
+  //   const socket = io(`${getBackURL()}`);
+  //   const msg = "hi";
+  //   socket.emit("send_msg", msg);
   // };
 
   return (

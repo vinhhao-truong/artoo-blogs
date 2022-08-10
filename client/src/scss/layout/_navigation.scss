@@ -1,8 +1,8 @@
-@import '../variables';
+@import "../variables";
 
 .Navigation {
-  @include flexAll;
-  justify-content: space-between;
+  // @include flexAll;
+  // justify-content: space-between;
   width: 100%;
   height: 3rem;
   // border-bottom: solid 1px;
@@ -12,12 +12,12 @@
   border-bottom: 2px solid $light-grey;
   top: 0;
   left: 0;
-  z-index: 1;
+  z-index: 2;
   &__Logo {
     a {
       margin-left: 1.5rem;
       text-decoration: none;
-      color: inherit;
+      color: black !important;
       font-size: 24px;
       font-weight: 700;
       cursor: pointer;
@@ -28,25 +28,31 @@
   }
   &__NavMain {
     position: absolute;
-    top: 50%;  
-    left: 50%; 
+    top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
+    height: calc(100% - 1.5px);
     li {
       display: inline-block;
       list-style: none;
-      
+      height: 100%;
       a {
-        height: 3rem;
-        line-height: 3rem;
+        @include flexAll(center, center, column);
         display: inline-block;
         text-decoration: none;
-        padding: 0 2rem;
-        color: $light-green;
+        padding: 0 3rem;
+        font-size: 8px;
+        height: 100%;
+        svg {
+          font-size: 27px;
+
+        }
         &:hover {
           background-color: rgba(aliceblue, 0.1);
         }
-        &.active, &:active {
-          border-bottom: 3px solid;
+        &.active,
+        &:active {
+          border-bottom: 1.5px solid;
         }
       }
     }
@@ -63,24 +69,49 @@
       }
     }
   }
-  &__SideProfile {
-    @include flexAll;
+  .right-nav {
+    @include flexAll(space-between);
+    min-width: 30rem;
     position: absolute;
-    right: 1.5rem;
-    margin-right: 1.5rem;
+    top: 0;
+    right: 0;
     height: inherit;
-    cursor: pointer;
-    
-    // border: solid 1px $white !important; //To make elements never move when hovered
-    //Every Child
-    & > * {
-      margin: 0 0.3rem 0 0.3rem;
+    .search-bar {
+      max-width: 60%;
+      position: relative;
+      top: 50%;
+      transform: translateY(-55%);
     }
-    .image {
-      @include flexAll;
-      img {
-        @include imgRound(32px, 32px);
-        margin-right: 2px;
+    .search-bar-mobile {
+      position: relative;
+      top: 50%;
+      transform: translate(17rem, -55%);
+      max-width: 30%;
+    }
+    .SideProfile {
+      @include flexAll(flex-end);
+      cursor: pointer;
+
+      // border: solid 1px $white !important; //To make elements never move when hovered
+      //Every Child
+      & > * {
+        margin: 0 0.3rem;
+      }
+      .image {
+        @include flexAll;
+        width: fit-content;
+        img {
+          @include imgRound(32px, 32px);
+          margin-right: 2px;
+        }
+      }
+    }
+    .right-nav-mobile {
+      max-width: 10rem;
+      transform: translateX(-10rem) !important;
+      // @include flexAll(flex-end);
+      & > * {
+        margin: 0;
       }
     }
   }

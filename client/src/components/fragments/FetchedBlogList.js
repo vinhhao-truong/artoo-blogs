@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import LoadingBar from "react-top-loading-bar";
 
-import { useSelector } from "react-redux";
-import { selectMyProfile } from "../store/user/myProfile-slice";
+import { useDispatch } from "react-redux";
 
 import EmptyList from "./EmptyList";
 import Blog from "./Blog";
+import { setLoadingBar } from "../../store/user/features-slice";
 
 const BlogList = ({ blogs, className }) => {
   return (
@@ -19,16 +18,19 @@ const BlogList = ({ blogs, className }) => {
 };
 
 const FetchedBlogList = ({ url, emptyMsg, state, className }) => {
+
   const [isNoBlog, setIsNoBlog] = useState(false);
-  const [loadingProgress, setLoadingProgress] = useState(0);
   const [blogList, setBlogList] = useState(null);
-  const myProfile = useSelector(selectMyProfile);
+
+
+  const dispatch = useDispatch();
 
   const callFetchedList = async () => {
-    setLoadingProgress(33);
+    dispatch(setLoadingBar(33));
     try {
       const res = await axios.get(url);
-      setLoadingProgress(66);
+
+      dispatch(setLoadingBar(66));
       const data = await res.data.data;
       if (data.length > 0) {
         setBlogList(data.sort((a, b) => (b.uploadTime > a.uploadTime) ? 1 : -1));
@@ -41,11 +43,12 @@ const FetchedBlogList = ({ url, emptyMsg, state, className }) => {
     } catch (err) {
       console.log(err);
     }
-    setLoadingProgress(100);
+    dispatch(setLoadingBar(100));
   };
 
   useEffect(() => {
     callFetchedList();
+
     // console.log(blogList)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url, state]);
@@ -54,8 +57,6 @@ const FetchedBlogList = ({ url, emptyMsg, state, className }) => {
     <>
       {isNoBlog && !blogList && <EmptyList msg={emptyMsg} />}
       {!isNoBlog && blogList && <BlogList className={className ? className : ""} blogs={blogList} />}
-      {/* <LoadingModal isLoading={isLoading} type="bubbles" /> */}
-      <LoadingBar onLoaderFinished={() => setLoadingProgress(0)} color={myProfile.pickedColor} progress={loadingProgress} />
     </>
   );
 };

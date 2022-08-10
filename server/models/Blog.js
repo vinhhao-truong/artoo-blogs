@@ -23,7 +23,8 @@ const blogSchema = mongoose.Schema({
   content: {
     type: String,
     required: true
-  }
+  },
+  images: [String]
 })
 
 const BlogModel = mongoose.model("Blog", blogSchema)
