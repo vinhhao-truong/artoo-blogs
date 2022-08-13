@@ -26,7 +26,14 @@ import { getBackURL } from "../../fns/getURLPath";
 import { BiImageAdd } from "react-icons/bi";
 
 import { firebaseStorage } from "../../store/firebase";
-import { uploadBytes, ref, getDownloadURL, listAll } from "firebase/storage";
+import {
+  uploadBytes,
+  ref,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
+import { ImCross } from "react-icons/im";
+import {TbInboxOff} from "react-icons/tb"
 
 const AddOrUpdateBlogForm = ({ closeModal, action, existedBlog }) => {
   const myProfile = useSelector(selectMyProfile);
@@ -72,25 +79,37 @@ const AddOrUpdateBlogForm = ({ closeModal, action, existedBlog }) => {
     },
   ].sort();
 
+  const initialPreviewList = action === "update" ? [...existedBlog.images] : [];
+
   const [imgList, setImgList] = useState([]);
-  const [imgPreviewList, setImgPreviewList] = useState([]);
-  const [selectedImg, setSelectedImg] = useState(null);
+  const [imgPreviewList, setImgPreviewList] = useState([...initialPreviewList]);
+  const [selectedImages, setSelectedImages] = useState(null);
+
+  const [isImgListCleared, setIsImgListCleared] = useState(false);
+  // console.log(existedBlog)
 
   useEffect(() => {
-    if (!selectedImg) {
+    if (!selectedImages) {
       return;
     } else {
-      setImgList((prev) => [...prev, selectedImg]);
+      setImgList((prev) => [...prev, ...selectedImages]);
     }
-
-    if (imgList.length <= 4) {
-      const objectUrl = URL.createObjectURL(selectedImg);
+    if (selectedImages.length === 1) {
+      const objectUrl = URL.createObjectURL(selectedImages[0]);
       setImgPreviewList((prev) => [...prev, objectUrl]);
-
       // free memory when ever this component is unmounted
       return () => URL.revokeObjectURL(objectUrl);
+    } else {
+      for (let i = 0; i < selectedImages.length; i++) {
+        const objectUrl = URL.createObjectURL(selectedImages[i]);
+        setImgPreviewList((prev) => [...prev, objectUrl]);
+        // free memory when ever this component is unmounted
+        if (i === selectedImages.length - 1) {
+          return () => URL.revokeObjectURL(objectUrl);
+        }
+      }
     }
-  }, [selectedImg]);
+  }, [selectedImages]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -109,10 +128,10 @@ const AddOrUpdateBlogForm = ({ closeModal, action, existedBlog }) => {
     try {
       if (action === "add") {
         const uploadedImgUrl = [];
-        for (let i = 1; i <= imgList.length; i++) {
+        for (let i = 1; i <= imgPreviewList.length; i++) {
           const imgRef = ref(
             firebaseStorage,
-            `images/blogs/${newBlog._id}/${i}`
+            `images/blogs/${newBlog._id}_${i}`
           );
           const uploadedImg = await uploadBytes(imgRef, imgList[i - 1]);
           const uploadedUrl = (await getDownloadURL(uploadedImg.ref)).slice();
@@ -123,7 +142,7 @@ const AddOrUpdateBlogForm = ({ closeModal, action, existedBlog }) => {
         // uploadedImgList.items.forEach(img => {
         //   uploadedImgUrl.push(getDownloadURL(img));
         // })
-
+        // console.log(imgList);
         await axios.post(`${getBackURL("/blogs")}`, {
           newBlog: {
             ...submittedBlog,
@@ -149,10 +168,53 @@ const AddOrUpdateBlogForm = ({ closeModal, action, existedBlog }) => {
         setNewBlog(initialBlog);
       }
       if (action === "update") {
+        const uploadedImgUrl = isImgListCleared ? [] : [...existedBlog.images];
+        const existedLength = existedBlog.images.length;
+        const currentLength = imgList.length;
+
+        //no clear
+        if (!isImgListCleared) {
+          for (let i = 1; i <= currentLength; i++) {
+            const imgUploadRef = ref(
+              firebaseStorage,
+              `images/blogs/${existedBlog._id}_${existedLength + i}`
+            );
+            const uploadRes = await uploadBytes(imgUploadRef, imgList[i - 1]);
+            const urlRes = (await getDownloadURL(uploadRes.ref)).slice();
+            uploadedImgUrl.push(urlRes);
+          }
+        }
+
+        //clear
+        if (isImgListCleared) {
+          const lengthDiff = Math.abs(existedLength - currentLength);
+          for (let i = 1; i <= Math.max(currentLength, lengthDiff); i++) {
+            //Only upload within the current length
+            if (i <= currentLength) {
+              const imgUploadRef = ref(
+                firebaseStorage,
+                `images/blogs/${existedBlog._id}_${i}`
+              );
+              const uploadRes = await uploadBytes(imgUploadRef, imgList[i - 1]);
+              const urlRes = (await getDownloadURL(uploadRes.ref)).slice();
+              uploadedImgUrl.push(urlRes);
+            }
+            //Only delete the diff if and when existed more than current
+            if (existedLength > currentLength && i <= lengthDiff) {
+              const delRef = ref(
+                firebaseStorage,
+                `images/blogs/${existedBlog._id}_${currentLength + i}`
+              );
+              await deleteObject(delRef);
+            }
+          }
+        }
+
         await axios.patch(`${getBackURL("/blogs")}`, {
           updatedBlog: {
             ...submittedBlog,
             uploadTime: new Date().toISOString(),
+            images: [...uploadedImgUrl],
           },
         });
         dispatch(
@@ -160,6 +222,7 @@ const AddOrUpdateBlogForm = ({ closeModal, action, existedBlog }) => {
             updatedBlog: {
               ...submittedBlog,
               uploadTime: new Date().toISOString(),
+              images: [...uploadedImgUrl],
             },
           })
         );
@@ -191,9 +254,14 @@ const AddOrUpdateBlogForm = ({ closeModal, action, existedBlog }) => {
     if (!e.target.files || e.target.files.length === 0) {
       return;
     }
+    setSelectedImages([...e.target.files]);
+  };
 
-    //Using the first image instead of multiple
-    setSelectedImg(e.target.files[0]);
+  const handleClearImg = (e) => {
+    e.preventDefault();
+    setIsImgListCleared(true);
+    setImgList([]);
+    setImgPreviewList([]);
   };
 
   return (
@@ -212,6 +280,7 @@ const AddOrUpdateBlogForm = ({ closeModal, action, existedBlog }) => {
             </>
           )}
         </h1>
+        <ImCross className="closeBtn" onClick={() => closeModal()} />
         <div className="title-categories">
           <TxtField
             size="small"
@@ -250,15 +319,28 @@ const AddOrUpdateBlogForm = ({ closeModal, action, existedBlog }) => {
           maxRows={8}
         />
         <div className="images">
-          {imgPreviewList.map((imgUrl, idx) => (
-            <img
-              className="img-preview"
-              key={idx}
-              src={imgUrl}
-              alt={`preview-${idx}`}
-            />
+          {imgPreviewList.slice(0, 4).map((imgUrl, idx) => (
+            <div key={idx} className="image">
+              <img
+                className="img-preview"
+                src={imgUrl}
+                alt={`preview-${idx}`}
+              />
+            </div>
           ))}
-          {imgList.length > 4 && <div className="more">...</div>}
+
+          {imgPreviewList.length > 4 && (
+            <div className="more">
+              <img
+                className="img-preview"
+                src={imgPreviewList[4]}
+                alt="preview-4"
+              />
+              {imgPreviewList.length > 5 && (
+                <div className="more-mask">+{imgPreviewList.length - 5}</div>
+              )}
+            </div>
+          )}
           <div style={{ color: myProfile.pickedColor }} className="uploadBtn">
             <BiImageAdd />
             <p>Upload Image</p>
@@ -267,8 +349,21 @@ const AddOrUpdateBlogForm = ({ closeModal, action, existedBlog }) => {
               type="file"
               name="add-img"
               id="add-img"
+              accept=".jpg, .jpeg, .png"
+              multiple
             />
           </div>
+          {imgPreviewList.length > 0 && (
+            <button
+              style={{
+                backgroundColor: myProfile.pickedColor,
+              }}
+              className="clearBtn"
+              onClick={handleClearImg}
+            >
+              <TbInboxOff /> Delete Images From The Post?
+            </button>
+          )}
         </div>
         <button className="submit-btn">
           {action === "add" ? "Create" : "Update"}

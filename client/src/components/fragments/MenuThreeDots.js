@@ -9,9 +9,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteBlog, selectMyProfile } from "../../store/user/myProfile-slice";
 import AddOrUpdateModal from "../modals/AddOrUpdateBlogModal";
 import { getFrontURL } from "../../fns/getURLPath";
+import { getBackURL } from "../../fns/getURLPath";
 import UpdateProfileModal from "../modals/UpdateProfileModal";
 import AlertModal from "../modals/Alert";
-import { triggerPopup } from "../../store/user/features-slice";
+import { startLoading, stopLoading, triggerPopup } from "../../store/user/features-slice";
+
+import { firebaseStorage } from "../../store/firebase";
+import { deleteObject, ref } from "firebase/storage";
 
 const ProfileMenu = ({ profile }) => {
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
@@ -101,19 +105,35 @@ const BlogMenu = ({ blog }) => {
   const isOwned = myProfile._id === blog.owner;
 
   const handleDeleteBlog = async () => {
-    await axios.delete(`http://localhost:3001/blogs`, {
-      data: {
-        _id: blog._id,
-      },
-    });
-    setIsDeleteModalOpen(false);
-    dispatch(deleteBlog({ blogId: blog._id }));
-    dispatch(
-      triggerPopup({
-        action: "delete",
-        msg: `${blog.title} deleted!`,
-      })
-    );
+    dispatch(startLoading())
+    try {
+      await axios.delete(getBackURL(`/blogs`), {
+        data: {
+          _id: blog._id,
+        },
+      });
+      if (blog.images.length > 0) {
+        console.log("images")
+        for (let i = 1; i <= blog.images.length; i++) {
+          const blogImagesStorageRef = ref(
+            firebaseStorage,
+            `images/blogs/${blog._id}_${i}`
+          );
+          await deleteObject(blogImagesStorageRef);
+        }
+      }
+      setIsDeleteModalOpen(false);
+      dispatch(deleteBlog({ blogId: blog._id }));
+      dispatch(
+        triggerPopup({
+          action: "delete",
+          msg: `${blog.title} deleted!`,
+        })
+      );
+    } catch (err) {
+      console.log(err);
+    }
+    dispatch(stopLoading())
   };
 
   const unownedItems = [
@@ -180,19 +200,23 @@ const BlogMenu = ({ blog }) => {
         action="update"
         existedBlog={blog}
       />
-      {isDeleteModalOpen && <AlertModal
-        isTwoWays={true}
-        isOpen={isDeleteModalOpen}
-        setIsOpen={setIsDeleteModalOpen}
-        type="failure"
-        customIcon={<RiDeleteBin6Line />}
-        title={`Delete ${blog.title}?`}
-        content="This blog will not be able to be recovered!"
-        onYes={handleDeleteBlog}
-        onNo={() => {setIsDeleteModalOpen(false)}}
-        yesBtn="Delete"
-        noBtn="Cancel"
-      />}
+      {isDeleteModalOpen && (
+        <AlertModal
+          isTwoWays={true}
+          isOpen={isDeleteModalOpen}
+          setIsOpen={setIsDeleteModalOpen}
+          type="failure"
+          customIcon={<RiDeleteBin6Line />}
+          title={`Delete ${blog.title}?`}
+          content="This blog will not be able to be recovered!"
+          onYes={handleDeleteBlog}
+          onNo={() => {
+            setIsDeleteModalOpen(false);
+          }}
+          yesBtn="Delete"
+          noBtn="Cancel"
+        />
+      )}
     </>
   );
 };

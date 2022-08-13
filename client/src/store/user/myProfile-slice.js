@@ -21,7 +21,7 @@ const myProfileSlice = createSlice({
       return { ...initialState, ...action.payload };
     },
     updateProfile: (state, action) => {
-      console.log({ ...action.payload.newProfile });
+      // console.log({ ...action.payload.newProfile });
 
       return { ...action.payload.newProfile };
     },

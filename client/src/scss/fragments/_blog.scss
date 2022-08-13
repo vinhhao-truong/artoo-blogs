@@ -2,12 +2,12 @@
 
 .BlogList {
   @include flexAll(flex-start, center, column);
-  width: 40rem;
+  width: calc(512px + (1.5rem * 2) + 3rem);
   max-width: 80%;
   .Blog {
     width: 100%;
     min-height: 12rem;
-    margin: 1rem;
+    margin: 0.5rem;
     background-color: $white;
     border-radius: 10px;
     box-shadow: 10px 8px 6px rgba(#000000, 0.02);
@@ -15,6 +15,7 @@
     &__Inner {
       position: relative;
       overflow-y: auto;
+      // padding: 1.5rem;
       .head-bar {
         position: absolute;
         top: 0;
@@ -24,10 +25,9 @@
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
       }
-      padding: 1rem;
       &__Header {
         @include flexAll(space-between, center);
-        margin-bottom: 1rem;
+        padding: 1.5rem 1.5rem 1rem;
         .header-right {
           @include flexAll(flex-end);
           .upload-time {
@@ -41,6 +41,7 @@
       &__Body {
         white-space: pre-wrap; //to display new line if needed
         overflow: auto;
+        padding: 0 1.5rem;
         .body-header {
           width: 100%;
           @include flexAll(space-between);
@@ -65,10 +66,44 @@
         }
       }
       .images {
-        @include flexAll(center, center);
+        @include flexAll(center, flex-start);
         flex-wrap: wrap;
-        & > * {
-          width: 30%;
+        position: relative;
+        width: 100%;
+        padding: 0 0 1.5rem;
+        //To make img 100%
+        .ant-row {
+          width: 100%;
+          .ant-col {
+            .ant-image {
+              height: 100% !important;
+              img {
+                height: 100% !important;
+              }
+            }
+          }
+        }
+      }
+      .images-5 {
+        .images-right {
+          width: calc(256px + 2%);
+          height: calc(256px + 2%);
+        }
+        .extended-mask {
+          color: $white;
+          font-size: 30px;
+          @include flexAll();
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(#000000, 0.5);
+          user-select: none;
+          cursor: pointer;
+          &:hover {
+            background-color: rgba(#000000, 0.6);
+          }
         }
       }
     }

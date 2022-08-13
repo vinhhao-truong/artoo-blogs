@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { selectMyProfile } from "../../store/user/myProfile-slice";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { Image } from "antd";
+import { Col, Row } from "antd";
 
 import "@szhsin/react-menu/dist/index.css";
 
@@ -38,6 +40,8 @@ const Blog = ({ blog }) => {
     `${getBackURL(`/users/${blog.owner}/`)}`
   );
   const [limitedContent, setLimitedContent] = useState("");
+  const [previewImgList, setPreviewImgList] = useState([]);
+  const [previewImgClasses, setPreviewImgClasses] = useState("");
 
   useEffect(() => {
     if (blog.owner === myProfile._id) {
@@ -48,11 +52,20 @@ const Blog = ({ blog }) => {
   }, [fetchedOwner, myProfile, blog]);
 
   useEffect(() => {
-    const limit = 750;
-    if (blog.content.length > limit) {
-      setLimitedContent(blog.content.substring(0, limit));
+    const charLimit = 750;
+    if (blog.content.length > charLimit) {
+      setLimitedContent(blog.content.substring(0, charLimit));
     } else {
       setLimitedContent(blog.content);
+    }
+
+    const imgLimit = 5;
+    if (blog.images.length >= imgLimit) {
+      setPreviewImgList(blog.images.slice(0, imgLimit));
+      setPreviewImgClasses(`images-${imgLimit}`);
+    } else {
+      setPreviewImgList([...blog.images]);
+      setPreviewImgClasses(`images-${blog.images.length}`);
     }
   }, [blog]);
 
@@ -110,11 +123,49 @@ const Blog = ({ blog }) => {
               )}
             </p>
           </Body>
-          <div className="images">
-            {typeof blog.images === "object" &&
-              blog.images.map((img, idx) => (
-                <img src={img} alt="" key={`${blog._id}_${idx}`} />
-              ))}
+          <div className={`images ${previewImgClasses}`}>
+            {blog.images.length >= 5 && (
+              <>
+                <Row gutter={[1, 1]} wrap>
+                  {blog.images.slice(0, 2).map((img, idx) => (
+                    <Col span={12} key={blog._id + `_first_${idx}`}>
+                      <Image src={img} alt={blog._id + "-preview"} />
+                    </Col>
+                  ))}
+                  {blog.images.slice(2, 4).map((img, idx) => (
+                    <Col span={8} key={blog._id + `_second_${idx}`}>
+                      <Image src={img} alt={blog._id + "-preview"} />
+                    </Col>
+                  ))}
+                  <Col span={8} key={blog._id + "third"}>
+                    <Image src={blog.images[4]} alt={blog._id + "-preview"} />
+                    {blog.images.length > 5 && (
+                      <Link
+                        to={`/blog/detail?blogId=${blog._id}&owner=${blog.owner}`}
+                        className="extended-mask"
+                      >
+                        <p>+{blog.images.length - 5}</p>
+                      </Link>
+                    )}
+                  </Col>
+                </Row>
+              </>
+            )}
+            {blog.images.length < 5 && blog.images.length !== 1 && (
+              <Row gutter={[1, 1]} wrap>
+                {blog.images.map((img, idx) => (
+                  <Col
+                    span={blog.images.length !== 3 ? 12 : 8}
+                    key={blog._id + `_first_${idx}`}
+                  >
+                    <Image src={img} alt={blog._id + "-preview"} />
+                  </Col>
+                ))}
+              </Row>
+            )}
+            {blog.images.length === 1 && (
+              <Image src={blog.images[0]} alt={blog._id + "-preview"} />
+            )}
           </div>
           {isUpdateModalOpen && (
             <AddOrUpdateModal

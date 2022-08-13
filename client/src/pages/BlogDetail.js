@@ -17,6 +17,8 @@ import { timeDiffFromNow } from "../fns/formatTime";
 import upperFirstLetter from "../fns/upperFirstLetter";
 import { setLoadingBar } from "../store/user/features-slice";
 
+import { Image, Row, Col } from "antd";
+
 const ThisBlog = ({ owner, blog }) => {
   return (
     <div className="BlogDetail__blog">
@@ -48,6 +50,48 @@ const ThisBlog = ({ owner, blog }) => {
       <div className="detail">
         <h2>{blog.title}</h2>
         <p>{blog.content}</p>
+        <p className="count">
+          Images Count:{" "}
+          <span style={{ color: owner.pickedColor }}>{blog.images.length}</span>
+        </p>
+        <div className="images">
+          <Image.PreviewGroup>
+            {blog.images.length === 1 && (
+              <Image src={blog.images[0]} alt={blog._id + "-preview"} />
+            )}
+            {blog.images.length > 1 && (
+              <Row wrap>
+                {/* Even Nums */}
+                {blog.images.length % 2 === 0 &&
+                  blog.images.map((img, idx) => (
+                    <Col span={12}>
+                      <Image src={img} alt={blog._id + "-preview"} key={idx} />
+                    </Col>
+                  ))}
+                {/* Odd Nums */}
+                {blog.images.length % 2 !== 0 && (
+                  <>
+                    <Col span={12}>
+                      <Image src={blog.images[0]} alt={blog._id + "-preview"} />
+                    </Col>
+                    <Col span={12}>
+                      {blog.images.slice(1, 3).map((img, idx) => (
+                        <Row key={idx + 1}>
+                          <Image src={img} alt={blog._id + "-preview"} />
+                        </Row>
+                      ))}
+                    </Col>
+                    {blog.images.slice(3).map((img, idx) => (
+                      <Col span={12} key={idx + 1}>
+                        <Image src={img} alt={blog._id + "-preview"} />
+                      </Col>
+                    ))}
+                  </>
+                )}
+              </Row>
+            )}
+          </Image.PreviewGroup>
+        </div>
       </div>
     </div>
   );

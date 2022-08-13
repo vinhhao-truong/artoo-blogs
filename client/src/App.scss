@@ -39,7 +39,7 @@
 
 body {
   min-height: 100%;
-  width: 100vw !important;
+  width: 100% !important;
   font-family: "Nunito Sans", sans-serif;
   font-weight: 400;
   background-color: $light-grey !important;
@@ -56,5 +56,8 @@ body {
   &::-webkit-scrollbar-thumb {
     background-color: darkgrey;
     outline: 1px solid slategrey;
+  }
+  img {
+    object-fit: cover !important;
   }
 }

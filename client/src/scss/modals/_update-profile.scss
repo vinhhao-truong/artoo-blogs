@@ -18,6 +18,17 @@
     h1 {
       margin-top: 1rem;
     }
+    .closeBtn {
+      color: $grey;
+      position: absolute;
+      right: 1.5rem;
+      top: 1rem;
+      transform: scale(0.8);
+      cursor: pointer;
+      &:hover {
+        filter: brightness(80%);
+      }
+    }
     .top {
       width: 100%;
       @include flexAll(space-between);

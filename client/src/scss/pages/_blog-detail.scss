@@ -62,6 +62,25 @@
       h2 {
         text-align: center;
       }
+      .count {
+        text-align: end;
+        line-height: 5px;
+        font-style: italic;
+      }
+      .images {
+        //To make img 100%
+        .ant-row {
+          width: 100%;
+          .ant-col {
+            .ant-image {
+              height: 100% !important;
+              img {
+                height: 100% !important;
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

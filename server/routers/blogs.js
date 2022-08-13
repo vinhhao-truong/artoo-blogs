@@ -1,11 +1,10 @@
-const path = require('path');
+const path = require("path");
 const blogRouter = require("express").Router();
 
 const handleFind = require(path.join(__dirname, "../fns/handleFind"));
 const response = require(path.join(__dirname, "../fns/response"));
 
 const { BlogModel } = require(path.join(__dirname, "../models/Blog"));
-
 
 const logErrQuery = (err) => {
   if (err) {
@@ -16,21 +15,23 @@ const logErrQuery = (err) => {
 blogRouter
   .route("/")
   .get((req, res) => {
-    
-      handleFind("All blogs found successfully!", res, BlogModel, "find");
-      console.log("All blogs found or error occurred (if have above)!");
-    
-
-    
+    handleFind("All blogs found successfully!", res, BlogModel, "find");
+    console.log("All blogs found or error occurred (if have above)!");
   })
-  .post((req, res) => {
+  .post(async (req, res) => {
     try {
-      if (req.body.newBlog) {
-        const newBlog = new BlogModel(req.body.newBlog);
+      const newBlogFromReq = req.body.newBlog;
+      if (newBlogFromReq) {
+        //create Blog model
+        const newBlog = new BlogModel({
+          ...newBlogFromReq,
+        });
         //Save to overall blogs db
         newBlog.save((queryErr) => {
           if (!queryErr) {
-            res.send(response("The blog created successfully!", null));
+            res.send(
+              response("The blog created successfully!", null)
+            );
             console.log("The new blog saved successfully!");
           } else {
             console.log(queryErr);
@@ -78,8 +79,8 @@ blogRouter.route("/filter/:resData").get((req, res) => {
   const resData = req.params.resData;
   const query = req.query;
 
-  if(resData) {
-    if(resData === "allArtTypes") {
+  if (resData) {
+    if (resData === "allArtTypes") {
       try {
         let typeList = [];
         BlogModel.find((findErr, foundBlogs) => {
@@ -101,21 +102,22 @@ blogRouter.route("/filter/:resData").get((req, res) => {
       }
     }
 
-    if(resData === "blogList") {
+    if (resData === "blogList") {
       if (query) {
         if (query.artType) {
           handleFind("Filtered blogs found!", res, BlogModel, "find", {
             artType: query.artType,
           });
-          console.log("Filtered blogs found or error occurred (if have above)!");
+          console.log(
+            "Filtered blogs found or error occurred (if have above)!"
+          );
         }
         if (query.artTypes) {
-          
         }
       }
     }
   }
-})
+});
 
 blogRouter.route("/:blogId").get((req, res) => {
   handleFind("The blog is found!", res, BlogModel, "findOne", {

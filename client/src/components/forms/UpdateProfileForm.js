@@ -22,11 +22,9 @@ import {
 } from "../../store/user/features-slice";
 
 import { firebaseStorage } from "../../store/firebase";
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL,
-} from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
+import { ImCross } from "react-icons/im";
 
 const UpdateProfileForm = ({ closeModal }) => {
   const err = (state, message) => ({ isErr: state, msg: message });
@@ -121,7 +119,7 @@ const UpdateProfileForm = ({ closeModal }) => {
         dispatch(
           updateProfile({
             newProfile: {
-              ...myProfile,
+              ...newProfile,
               profileImg: uploadedImgUrl,
             },
           })
@@ -140,8 +138,16 @@ const UpdateProfileForm = ({ closeModal }) => {
             idToken: auth.idToken,
           },
         });
+        dispatch(
+          updateProfile({
+            newProfile: {
+              ...newProfile,
+            },
+          })
+        );
       }
       // console.log(newProfile);
+
       dispatch(
         triggerPopup({
           msg: "Profile updated!",
@@ -162,6 +168,8 @@ const UpdateProfileForm = ({ closeModal }) => {
       className="UpdateProfileForm"
     >
       <h1 className="pickedColor">Updating Profile...</h1>
+      <ImCross className="closeBtn" onClick={() => closeModal()} />
+
       <div className="top">
         <div
           className="img-upload"
@@ -189,11 +197,7 @@ const UpdateProfileForm = ({ closeModal }) => {
               alt="profile-img"
             />
           )}
-          {isImgHovered && (
-            <div className="upload-hover">
-              Upload
-            </div>
-          )}
+          {isImgHovered && <div className="upload-hover">Upload</div>}
         </div>
         <div className="name">
           <div className="real-name">
