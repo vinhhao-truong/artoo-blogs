@@ -9,7 +9,6 @@ import { selectMyProfile } from "../../store/user/myProfile-slice";
 
 import upperFirstLetter from "../../fns/upperFirstLetter";
 import useGETFetch from "../../hooks/useFetch";
-import { getBackURL } from "../../fns/getURLPath";
 
 const TypeFilter = ({ isAll, uid }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -19,7 +18,7 @@ const TypeFilter = ({ isAll, uid }) => {
   const myProfile = useSelector(selectMyProfile);
   const navigate = useNavigate();
 
-  const { resData: list} = useGETFetch(getBackURL(`/blogs/filter/allArtTypes?for=${isAll ? "all": uid}`))
+  const { resData: list} = useGETFetch(`/blogs/filter/allArtTypes?for=${isAll ? "all": uid}`)
   const renderedList = list ? ["all", ...list].sort() : null;
 
   const handleFilter = (query) => () => {

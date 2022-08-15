@@ -9,12 +9,11 @@ import FetchedBlogList from "../components/fragments/FetchedBlogList";
 import { ChildHelmet } from "../components/fragments/Helmet";
 import TypeFilter from "../components/fragments/TypeFilter";
 import useGETFetch from "../hooks/useFetch"
-import { getBackURL } from "../fns/getURLPath";
 import { useLocation } from "react-router-dom";
 
 const MyBlogs = ({ uid }) => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [blogListApiUrl, setBlogListApiUrl] = useState(getBackURL(`/users/${uid}?q=myBlogs`));
+  const [blogListApiUrl, setBlogListApiUrl] = useState(`/users/${uid}?q=myBlogs`);
 
   const location = useLocation();
   const myProfile = useSelector(selectMyProfile);
@@ -24,10 +23,10 @@ const MyBlogs = ({ uid }) => {
     const filterParam = searchParams.get("filter");
     if (filterParam) {
       setBlogListApiUrl(
-        getBackURL(`/users/${uid}?q=myBlogs&artType=${filterParam}`)
+        `/users/${uid}?q=myBlogs&artType=${filterParam}`
       );
     } else {
-      setBlogListApiUrl(getBackURL(`/users/${uid}?q=myBlogs`));
+      setBlogListApiUrl(`/users/${uid}?q=myBlogs`);
     }
   }, [location, myProfile]);
 

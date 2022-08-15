@@ -13,8 +13,6 @@ import { MdOutlineAssignmentInd } from "react-icons/md";
 import useResponsive from "../../hooks/useResponsive";
 import { ControlledMenu, MenuItem } from "@szhsin/react-menu";
 
-import { getBackURL } from "../../fns/getURLPath";
-
 import { BiSearchAlt2 } from "react-icons/bi";
 import { AutoComplete, Input } from "antd";
 import { startLoading, stopLoading } from "../../store/user/features-slice";
@@ -75,7 +73,7 @@ const PrivateNav = ({ isMobileOrTablet }) => {
       try {
         setIsSearchLoading(true);
         const searchListRes = await axios.get(
-          getBackURL(`/users/search?name=${value}`)
+          `/users/search?name=${value}`
         );
         const searchListData = searchListRes.data.data;
         // console.log(res.data);

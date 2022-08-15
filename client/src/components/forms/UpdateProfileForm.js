@@ -12,7 +12,6 @@ import { CirclePicker as ColorPicker } from "react-color";
 import StyledForm from "../styled-components/StyledForm";
 import { TxtField, DateField } from "../styled-components/StyledTextField";
 import axios from "axios";
-import { getBackURL } from "../../fns/getURLPath";
 
 import colorCollection from "../../preset/themeColorCollections";
 import {
@@ -124,7 +123,7 @@ const UpdateProfileForm = ({ closeModal }) => {
             },
           })
         );
-        await axios.patch(`${getBackURL("/users?action=updateProfile")}`, {
+        await axios.patch("/users?action=updateProfile", {
           newProfile: {
             ...newProfile,
             idToken: auth.idToken,
@@ -132,7 +131,7 @@ const UpdateProfileForm = ({ closeModal }) => {
           },
         });
       } else {
-        await axios.patch(`${getBackURL("/users?action=updateProfile")}`, {
+        await axios.patch("/users?action=updateProfile", {
           newProfile: {
             ...newProfile,
             idToken: auth.idToken,

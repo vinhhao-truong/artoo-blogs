@@ -5,10 +5,4 @@ const getFrontURL =  (subDomain) => {
   return currentURLOrigin + currentSubDomain;
 };
 
-const getBackURL = (subDomain) => {
-  const currentProtocol = window.location.protocol;
-  const currentHostName =window.location.hostname;
-  return `${currentProtocol}//${currentHostName}:3001${subDomain ? subDomain : ""}`;
-}
-
-export {getFrontURL, getBackURL};
+export {getFrontURL};

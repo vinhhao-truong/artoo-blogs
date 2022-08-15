@@ -13,7 +13,6 @@ import AlertModal from "../components/modals/Alert";
 import useResponsive from "../hooks/useResponsive";
 import colorCollection from "../preset/themeColorCollections";
 
-import { getBackURL } from "../fns/getURLPath";
 import { useDispatch } from "react-redux";
 import { startLoading, stopLoading } from "../store/user/features-slice";
 
@@ -152,7 +151,7 @@ const Signup = () => {
             profileImg: unsetProfileImg
           },
         };
-        await axios.post(getBackURL("/users?request=signup"), newUser);
+        await axios.post("/users?request=signup", newUser);
         setAlert({
           type: "success",
           title: "Sign Up Successfully",

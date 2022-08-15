@@ -14,7 +14,6 @@ import {
 import AlertModal from "../components/modals/Alert";
 import useResponsive from "../hooks/useResponsive";
 
-import { getBackURL } from "../fns/getURLPath";
 import { startLoading, stopLoading } from "../store/user/features-slice";
 import { ChildHelmet } from "../components/fragments/Helmet";
 
@@ -58,7 +57,7 @@ const Login = () => {
       });
       const authData = await authReq.data;
       const profileReq = await axios.get(
-        getBackURL(`/users/${authData.localId}`)
+        `/users/${authData.localId}`
       );
       const profileData = await profileReq.data.data;
       dispatch(

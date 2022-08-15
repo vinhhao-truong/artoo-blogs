@@ -7,7 +7,6 @@ import "./App.scss";
 import "antd/dist/antd.min.css";
 
 //Import fns
-import { getBackURL } from "./fns/getURLPath";
 
 //Import Layout
 import MobileSubNav from "./components/layout/MobileSubNav";
@@ -53,9 +52,9 @@ function App() {
   //initiate the app if user refreshes but keep logging in
   const initiateMyProfile = async () => {
     try {
-      const profileRes = await axios.get(getBackURL(`/users/${auth.uid}`));
+      const profileRes = await axios.get(`/users/${auth.uid}`);
       const myBlogsRes = await axios.get(
-        getBackURL(`/users/${auth.uid}?q=myBlogs`)
+        `/users/${auth.uid}?q=myBlogs`
       );
       const profileData = await profileRes.data.data;
       const myBlogsData = await myBlogsRes.data.data;

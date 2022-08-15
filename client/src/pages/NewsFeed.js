@@ -9,12 +9,11 @@ import AddBlogBtn from "../components/styled-components/AddBlogBtn";
 import FetchBlogList from "../components/fragments/FetchedBlogList";
 import TypeFilter from "../components/fragments/TypeFilter";
 
-import { getBackURL } from "../fns/getURLPath";
 import { MainHelmet } from "../components/fragments/Helmet";
 
 const NewsFeed = ({ isHomeRefreshed }) => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [blogListApiUrl, setBlogListApiUrl] = useState(getBackURL("/blogs"));
+  const [blogListApiUrl, setBlogListApiUrl] = useState("/blogs");
   const [fetchState, setFetchState] = useState(false);
   const myProfile = useSelector(selectMyProfile);
 
@@ -29,10 +28,10 @@ const NewsFeed = ({ isHomeRefreshed }) => {
     }
     if (filterParam) {
       setBlogListApiUrl(
-        getBackURL(`/blogs/filter/blogList?artType=${filterParam}`)
+        `/blogs/filter/blogList?artType=${filterParam}`
       );
     } else {
-      setBlogListApiUrl(getBackURL("/blogs"));
+      setBlogListApiUrl("/blogs");
     }
   }, [location, isHomeRefreshed, fetchState, myProfile]);
 

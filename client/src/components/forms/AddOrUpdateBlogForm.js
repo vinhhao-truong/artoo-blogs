@@ -21,8 +21,6 @@ import {
   triggerPopup,
 } from "../../store/user/features-slice";
 
-import { getBackURL } from "../../fns/getURLPath";
-
 import { BiImageAdd } from "react-icons/bi";
 
 import { firebaseStorage } from "../../store/firebase";
@@ -143,7 +141,7 @@ const AddOrUpdateBlogForm = ({ closeModal, action, existedBlog }) => {
         //   uploadedImgUrl.push(getDownloadURL(img));
         // })
         // console.log(imgList);
-        await axios.post(`${getBackURL("/blogs")}`, {
+        await axios.post("/blogs", {
           newBlog: {
             ...submittedBlog,
             uploadTime: new Date().toISOString(),
@@ -210,7 +208,7 @@ const AddOrUpdateBlogForm = ({ closeModal, action, existedBlog }) => {
           }
         }
 
-        await axios.patch(`${getBackURL("/blogs")}`, {
+        await axios.patch("/blogs", {
           updatedBlog: {
             ...submittedBlog,
             uploadTime: new Date().toISOString(),

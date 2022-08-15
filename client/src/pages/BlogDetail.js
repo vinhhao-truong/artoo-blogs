@@ -10,7 +10,7 @@ import "@szhsin/react-menu/dist/index.css";
 import { BsThreeDots } from "react-icons/bs";
 
 import useGETFetch from "../hooks/useFetch";
-import { getBackURL } from "../fns/getURLPath";
+
 
 import LoadingBar from "react-top-loading-bar";
 import { timeDiffFromNow } from "../fns/formatTime";
@@ -107,10 +107,10 @@ const BlogDetail = () => {
   const paramBlogId = params.get("blogId");
   const paramOwnerId = params.get("owner");
   const { resData: fetchedBlog } = useGETFetch(
-    getBackURL(`/blogs/${paramBlogId}`)
+    `/blogs/${paramBlogId}`
   );
   const { resData: fetchedOwner } = useGETFetch(
-    getBackURL(`/users/${paramOwnerId}`)
+    `/users/${paramOwnerId}`
   );
 
   const myProfile = useSelector(selectMyProfile);

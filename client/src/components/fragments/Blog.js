@@ -13,9 +13,6 @@ import AddOrUpdateModal from "../modals/AddOrUpdateBlogModal";
 import useGETFetch from "../../hooks/useFetch";
 
 import { timeDiffFromNow } from "../../fns/formatTime";
-
-import { getBackURL } from "../../fns/getURLPath";
-
 const Container = (props) => {
   return (
     <div style={props.style} className="Blog">
@@ -37,7 +34,7 @@ const Blog = ({ blog }) => {
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const myProfile = useSelector(selectMyProfile);
   const { resData: fetchedOwner } = useGETFetch(
-    `${getBackURL(`/users/${blog.owner}/`)}`
+    `/users/${blog.owner}/`
   );
   const [limitedContent, setLimitedContent] = useState("");
   const [previewImgList, setPreviewImgList] = useState([]);

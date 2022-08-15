@@ -11,7 +11,6 @@ import AddBlogBtn from "../components/styled-components/AddBlogBtn";
 import AddOrUpdateModal from "../components/modals/AddOrUpdateBlogModal";
 import MenuThreeDots from "../components/fragments/MenuThreeDots";
 
-import { getBackURL } from "../fns/getURLPath";
 import { setImgPreview } from "../store/user/features-slice";
 import { ChildHelmet } from "../components/fragments/Helmet";
 import TypeFilter from "../components/fragments/TypeFilter";
@@ -110,9 +109,9 @@ const Profile = () => {
   const [profile, setProfile] = useState(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [emptyBlogMsg, setEmptyBlogMsg] = useState("");
-  const [blogListApiUrl, setBlogListApiUrl] = useState(getBackURL(`/users/${currentUid}?q=myBlogs`));
+  const [blogListApiUrl, setBlogListApiUrl] = useState(`/users/${currentUid}?q=myBlogs`);
 
-  const { resData } = useGETFetch(getBackURL(`/users/${currentUid}`));
+  const { resData } = useGETFetch(`/users/${currentUid}`);
   const myProfile = useSelector(selectMyProfile);
 
   useEffect(() => {
@@ -138,10 +137,10 @@ const Profile = () => {
     const filterParam = searchParams.get("filter");
     if (filterParam) {
       setBlogListApiUrl(
-        getBackURL(`/users/${profile._id}?q=myBlogs&artType=${filterParam}`)
+        `/users/${profile._id}?q=myBlogs&artType=${filterParam}`
       );
     } else {
-      setBlogListApiUrl(getBackURL(`/users/${currentUid}?q=myBlogs`));
+      setBlogListApiUrl(`/users/${currentUid}?q=myBlogs`);
     }
   }, [location, profile]);
 

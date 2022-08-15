@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 
 import bgImg from "../img/landingBg.jpg";
-import bgImgWebp from "../img/landingBg.webp";
 
 import Login from "./Login";
 import { BiCopyright } from "react-icons/bi";
@@ -11,10 +10,9 @@ const Landing = () => {
   return (
     <div className="Landing">
       <MainHelmet />
-      <picture>
-        <source srcSet={bgImgWebp} type="image/webp" />
+
         <img src={bgImg} alt="bg" />
-      </picture>
+
       <h1>
         <span className="pickedColor">Artoo Blogs</span>, where you share your
         masterpieces

@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteBlog, selectMyProfile } from "../../store/user/myProfile-slice";
 import AddOrUpdateModal from "../modals/AddOrUpdateBlogModal";
 import { getFrontURL } from "../../fns/getURLPath";
-import { getBackURL } from "../../fns/getURLPath";
 import UpdateProfileModal from "../modals/UpdateProfileModal";
 import AlertModal from "../modals/Alert";
 import { startLoading, stopLoading, triggerPopup } from "../../store/user/features-slice";
@@ -107,7 +106,7 @@ const BlogMenu = ({ blog }) => {
   const handleDeleteBlog = async () => {
     dispatch(startLoading())
     try {
-      await axios.delete(getBackURL(`/blogs`), {
+      await axios.delete("/blogs", {
         data: {
           _id: blog._id,
         },
