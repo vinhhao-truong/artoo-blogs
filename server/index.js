@@ -27,8 +27,8 @@ mongoose.connect(
 app.use("/users", userRouter);
 app.use("/blogs", blogRouter);
 
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+app.get("/*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../client", "build", "index.html"));
 });
 
 const PORT = process.env.PORT || 5000;
