@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet";
 const MainHelmet = () => {
   return (
     <Helmet>
-      <link
+      {/* <link
         rel="apple-touch-icon"
         sizes="180x180"
         href="../../../public/apple-touch-icon.png"
@@ -20,7 +20,7 @@ const MainHelmet = () => {
         sizes="16x16"
         href="../../../public/favicon-16x16.png"
       />
-      <link rel="manifest" href="../../../public/site.webmanifest" />
+      <link rel="manifest" href="../../../public/site.webmanifest" /> */}
       <title>Artoo Blogs</title>
     </Helmet>
   );
@@ -29,7 +29,7 @@ const MainHelmet = () => {
 const ChildHelmet = ({ title }) => {
   return (
     <Helmet>
-      <link
+      {/* <link
         rel="apple-touch-icon"
         sizes="180x180"
         href="../../../public/apple-touch-icon.png"
@@ -45,7 +45,7 @@ const ChildHelmet = ({ title }) => {
         type="image/png"
         sizes="16x16"
         href="../../../public/favicon-16x16.png"
-      />
+      /> */}
       <link rel="manifest" href="../../../public/site.webmanifest" />
       <title>{title} | Artoo Blogs</title>
     </Helmet>
