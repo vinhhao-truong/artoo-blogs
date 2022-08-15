@@ -32,6 +32,7 @@ import Account, {
   ChangePassword,
   VerifyEmail,
 } from "./pages/Account";
+import NotFound from "./pages/NotFound";
 
 //Import Store
 import { useSelector, useDispatch } from "react-redux";
@@ -53,9 +54,7 @@ function App() {
   const initiateMyProfile = async () => {
     try {
       const profileRes = await axios.get(`/users/${auth.uid}`);
-      const myBlogsRes = await axios.get(
-        `/users/${auth.uid}?q=myBlogs`
-      );
+      const myBlogsRes = await axios.get(`/users/${auth.uid}?q=myBlogs`);
       const profileData = await profileRes.data.data;
       const myBlogsData = await myBlogsRes.data.data;
       await dispatch(
@@ -158,7 +157,10 @@ function App() {
                 path="/account/change-password"
                 element={<ChangePassword />}
               />
+              <Route path="/account/*" element={<Navigate to="/not-found" replace />} />
             </Route>
+            <Route path="/not-found" element={<NotFound />} />
+            <Route path="*" element={<Navigate to="/not-found" replace />} />
           </Routes>
         ) : (
           <>
@@ -168,9 +170,9 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="*" element={<Navigate to="/" replace />} />
+              <Route path="/not-found" element={<NotFound />} />
+              <Route path="*" element={<Navigate to="/not-found" replace />} />
             </Routes>
-            
           </>
         )}
 

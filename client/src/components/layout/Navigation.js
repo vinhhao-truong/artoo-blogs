@@ -5,7 +5,7 @@ import { selectMyProfile } from "../../store/user/myProfile-slice";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useMatch, useNavigate } from "react-router-dom";
 import { TiArrowSortedDown } from "react-icons/ti";
 import { BiNews, BiHomeSmile, BiLogIn } from "react-icons/bi";
 import { MdOutlineAssignmentInd } from "react-icons/md";
@@ -72,9 +72,7 @@ const PrivateNav = ({ isMobileOrTablet }) => {
     if (value) {
       try {
         setIsSearchLoading(true);
-        const searchListRes = await axios.get(
-          `/users/search?name=${value}`
-        );
+        const searchListRes = await axios.get(`/users/search?name=${value}`);
         const searchListData = searchListRes.data.data;
         // console.log(res.data);
         setSearchList(
@@ -143,6 +141,7 @@ const PrivateNav = ({ isMobileOrTablet }) => {
         dispatch(startLoading());
 
         dispatch(logout());
+        navigate("/");
 
         dispatch(stopLoading());
       },
@@ -250,34 +249,38 @@ const Navigation = ({ isLoggedIn, setIsRefreshed }) => {
   const isTabletOrMobile = useResponsive("Tablet or Mobile");
   const location = useLocation();
   const auth = useSelector(selectAuth);
-  // console.log(location);
+
+  const matchHome = useMatch("/");
+  const matchNotFound = useMatch("/not-found");
+
+  const isRender = auth.isAuth || !matchHome;
+  console.log(location);
   return (
     <>
-    {
-      //No nav on landing page
-      (auth.isAuth || location.pathname !== "/") && (
-        <div className="Navigation">
-        <Logo>
-          <Link
-            to="/"
-            onClick={() => {
-              if (location.pathname === "/" && !location.search) {
-                setIsRefreshed(true);
-              }
-            }}
-          >
-            <span className="pickedColor-hover">Artoo</span> Blogs
-          </Link>
-        </Logo>
-        {isLoggedIn ? (
-          <PrivateNav isMobileOrTablet={isTabletOrMobile} />
-        ) : (
-          <PublicNav />
-        )}
-      </div>
-      )
-    }
-      
+      {
+        //No nav on landing page
+        isRender && !matchNotFound && (
+          <div className="Navigation">
+            <Logo>
+              <Link
+                to="/"
+                onClick={() => {
+                  if (location.pathname === "/" && !location.search) {
+                    setIsRefreshed(true);
+                  }
+                }}
+              >
+                <span className="pickedColor-hover">Artoo</span> Blogs
+              </Link>
+            </Logo>
+            {isLoggedIn ? (
+              <PrivateNav isMobileOrTablet={isTabletOrMobile} />
+            ) : (
+              <PublicNav />
+            )}
+          </div>
+        )
+      }
     </>
   );
 };

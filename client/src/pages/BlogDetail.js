@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,7 +15,7 @@ import useGETFetch from "../hooks/useFetch";
 import LoadingBar from "react-top-loading-bar";
 import { timeDiffFromNow } from "../fns/formatTime";
 import upperFirstLetter from "../fns/upperFirstLetter";
-import { setLoadingBar } from "../store/user/features-slice";
+import { setLoadingBar, startLoading, stopLoading } from "../store/user/features-slice";
 
 import { Image, Row, Col } from "antd";
 import {ChildHelmet} from "../components/fragments/Helmet";
@@ -103,6 +103,8 @@ const BlogDetail = () => {
   const [thisProfile, setThisProfile] = useState(null);
 
   const { search } = useLocation();
+  const navigate = useNavigate();
+
   const params = new URLSearchParams(search);
   const paramBlogId = params.get("blogId");
   const paramOwnerId = params.get("owner");
@@ -118,6 +120,11 @@ const BlogDetail = () => {
 
   useEffect(() => {
     dispatch(setLoadingBar(33));
+    dispatch(startLoading());
+    if(!paramBlogId || !paramOwnerId) {
+      navigate("/not-found")
+      return;
+    }
     if (paramOwnerId === myProfile._id) {
       setThisBlog(myProfile.myBlogs.find((blog) => blog._id === paramBlogId));
       dispatch(setLoadingBar(66));
@@ -127,6 +134,7 @@ const BlogDetail = () => {
       dispatch(setLoadingBar(66));
       setThisProfile(fetchedOwner);
     }
+    dispatch(stopLoading());
     dispatch(setLoadingBar(100));
   }, [
     fetchedBlog,

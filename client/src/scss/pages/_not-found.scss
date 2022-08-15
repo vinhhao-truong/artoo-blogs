@@ -1,0 +1,33 @@
+@import "../variables";
+
+.NotFound {
+  background: rgba($color: #000000, $alpha: 0.8);
+  height: 100vh;
+  position: relative;
+  color: $white;
+  @include flexAll(center, center, column);
+  &__bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+  }
+  h1 {
+    color: $white;
+  }
+  button {
+    cursor: pointer;
+    outline: none;
+    border: none;
+    color: $white;
+    padding: 0.8rem 2.5rem;
+    font-size: 20px;
+    border-radius: 30px;
+    &:hover {
+      transform: translate(1px, 1px);
+      filter: brightness(90%);
+    }
+  }
+}

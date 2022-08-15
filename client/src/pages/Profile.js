@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { selectMyProfile } from "../store/user/myProfile-slice";
 
@@ -11,7 +11,7 @@ import AddBlogBtn from "../components/styled-components/AddBlogBtn";
 import AddOrUpdateModal from "../components/modals/AddOrUpdateBlogModal";
 import MenuThreeDots from "../components/fragments/MenuThreeDots";
 
-import { setImgPreview } from "../store/user/features-slice";
+import { setImgPreview, startLoading, stopLoading } from "../store/user/features-slice";
 import { ChildHelmet } from "../components/fragments/Helmet";
 import TypeFilter from "../components/fragments/TypeFilter";
 
@@ -113,6 +113,8 @@ const Profile = () => {
 
   const { resData } = useGETFetch(`/users/${currentUid}`);
   const myProfile = useSelector(selectMyProfile);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (currentUid === myProfile._id) {
@@ -142,6 +144,7 @@ const Profile = () => {
     } else {
       setBlogListApiUrl(`/users/${currentUid}?q=myBlogs`);
     }
+
   }, [location, profile]);
 
   return (

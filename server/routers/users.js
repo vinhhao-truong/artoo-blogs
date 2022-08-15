@@ -109,11 +109,20 @@ usersRouter.route("/search").get((req, res) => {
             }
           };
 
-          if (userNickname.slice(0, queryLength) === query) {
+          if (
+            userNickname.slice(0, queryLength).toLowerCase() ===
+            query.toLowerCase()
+          ) {
             pushInResList();
-          } else if (userFirstName.slice(0, queryLength) === query) {
+          } else if (
+            userFirstName.slice(0, queryLength).toLowerCase() ===
+            query.toLowerCase()
+          ) {
             pushInResList();
-          } else if (userLastName.slice(0, queryLength) === query) {
+          } else if (
+            userLastName.slice(0, queryLength).toLowerCase() ===
+            query.toLowerCase()
+          ) {
             pushInResList();
           }
         }
@@ -137,7 +146,7 @@ usersRouter.route("/:uid").get((req, res) => {
         if (artTypeQuery) {
           handleFind("Blog list is found!", res, BlogModel, "find", {
             owner: userId,
-            artType: artTypeQuery
+            artType: artTypeQuery,
           });
         } else {
           handleFind("Blog list is found!", res, BlogModel, "find", {
