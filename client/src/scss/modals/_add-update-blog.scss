@@ -41,10 +41,10 @@
     .images {
       margin-bottom: 6rem;
       width: 100%;
-      @include flexAll(flex-start);
+      @include flexAll(center);
       flex-wrap: wrap;
       & > *:not(.clearBtn) {
-        width: 31%;
+        width: 25%;
         margin: 0.4rem;
         height: 6rem;
         border-radius: 10px;
@@ -63,6 +63,7 @@
         @include flexAll(center, center, column);
         background-color: $light-grey;
         position: relative;
+        text-align: center;
         svg {
           width: 40%;
           height: 40%;

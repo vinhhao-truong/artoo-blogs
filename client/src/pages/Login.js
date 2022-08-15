@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
 import { selectAuth, login } from "../store/user/auth-slice";
@@ -7,16 +7,21 @@ import { initiateProfile } from "../store/user/myProfile-slice";
 
 import axios from "axios";
 
-import { TxtField, PasswordField } from "../components/styled-components/StyledTextField";
+import {
+  TxtField,
+  PasswordField,
+} from "../components/styled-components/StyledTextField";
 import AlertModal from "../components/modals/Alert";
 import useResponsive from "../hooks/useResponsive";
 
-import {getBackURL} from "../fns/getURLPath"
+import { getBackURL } from "../fns/getURLPath";
 import { startLoading, stopLoading } from "../store/user/features-slice";
+import { ChildHelmet } from "../components/fragments/Helmet";
 
 const Login = () => {
   const err = (state, message) => ({ isErr: state, msg: message });
   const isTabletOrMobile = useResponsive("Tablet or Mobile");
+  const location = useLocation();
 
   const [loginDetail, setLoginDetail] = useState({
     email: "",
@@ -29,7 +34,7 @@ const Login = () => {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alert, setAlert] = useState({
     title: "",
-    content: ""
+    content: "",
   });
 
   const navigate = useNavigate();
@@ -56,7 +61,9 @@ const Login = () => {
         getBackURL(`/users/${authData.localId}`)
       );
       const profileData = await profileReq.data.data;
-      dispatch(login({ refreshToken: authData.refreshToken, uid: authData.localId }));
+      dispatch(
+        login({ refreshToken: authData.refreshToken, uid: authData.localId })
+      );
       dispatch(initiateProfile(profileData));
       navigate("/");
     } catch (err) {
@@ -66,19 +73,25 @@ const Login = () => {
       console.log(resErr);
       switch (resErr) {
         case "INVALID_EMAIL":
-          setAlert({title: "Invalid email!", content: "Please try again!"});
+          setAlert({ title: "Invalid email!", content: "Please try again!" });
           setLoginDetail((prev) => ({ ...prev, email: "" }));
           break;
         case "INVALID_PASSWORD":
-          setAlert({title: "Invalid password!", content: "Please try again!"});
+          setAlert({
+            title: "Invalid password!",
+            content: "Please try again!",
+          });
           setLoginDetail((prev) => ({ ...prev, password: "" }));
           break;
         case "EMAIL_NOT_FOUND":
-          setAlert({title: "Email not found!", content: "Please try again!"});
+          setAlert({ title: "Email not found!", content: "Please try again!" });
           setLoginDetail({ email: "", password: "" });
           break;
         case "TOO_MANY_ATTEMPTS_TRY_LATER":
-          setAlert({title: "Too many attempts", content: "Please try again later!"});
+          setAlert({
+            title: "Too many attempts",
+            content: "Please try again later!",
+          });
           setLoginDetail({ email: "", password: "" });
           break;
         default:
@@ -124,6 +137,7 @@ const Login = () => {
       }
       className="Login"
     >
+      {location.pathname === "/login" && <ChildHelmet title="Login" />}
       <form className="LoginForm" onSubmit={handleSubmitLogin}>
         <h1>
           Login to <span className="pickedColor">Artoo</span> Blogs
@@ -146,7 +160,9 @@ const Login = () => {
         <button className="submitBtn pickedColorBg-hover" autoFocus>
           Login
         </button>
-        <Link className="pickedColor" to="/forgot-password">Forgot Password?</Link>
+        <Link className="pickedColor" to="/forgot-password">
+          Forgot Password?
+        </Link>
       </form>
       <AlertModal
         isOpen={isAlertOpen}
@@ -154,7 +170,9 @@ const Login = () => {
         type="failure"
         title={alert.title}
         content={alert.content}
-        onYes={() => {setIsAlertOpen(false)}}
+        onYes={() => {
+          setIsAlertOpen(false);
+        }}
         yesBtn="Retry"
       />
     </div>

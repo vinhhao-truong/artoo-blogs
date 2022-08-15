@@ -4,6 +4,7 @@
   margin: 0 auto;
   @include flexAll(space-evenly, flex-start);
   max-width: 100rem;
+  min-height: 100%;
 
   .EmptyList {
     margin-top: 10rem;
@@ -77,6 +78,9 @@
           height: 168px;
           margin-bottom: 0.8rem;
           cursor: pointer;
+          img {
+            max-width: 256px;
+          }
         }
         .displayName {
           font-weight: 800;
@@ -106,6 +110,25 @@
           }
         }
       }
+    }
+  }
+  @media screen and (max-width: 1200px) {
+    width: 100%;
+    flex-direction: column-reverse;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    &__profile {
+      margin: 0;
+      position: unset;
+      width: 70vw;
+      @media screen and (max-width: 600px) {
+        width: 80vw;
+      }
+    }
+    &__blogList {
+      max-width: 80%;
+      margin-top: 30vh;
     }
   }
 }

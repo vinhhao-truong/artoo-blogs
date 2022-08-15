@@ -16,6 +16,7 @@ import MobileSubNav from "./components/layout/MobileSubNav";
 import Navigation from "./components/layout/Navigation";
 import StyledApp from "./components/styled-components/StyledApp";
 import TopLoadingBar from "./components/fragments/TopLoadingBar";
+import { BiCopyright } from "react-icons/bi";
 
 //Import Pages
 import Landing from "./pages/Landing";
@@ -35,12 +36,8 @@ import Account, {
 
 //Import Store
 import { useSelector, useDispatch } from "react-redux";
-import {
-  initiateProfile,
-  selectMyProfile,
-} from "./store/user/myProfile-slice";
+import { initiateProfile, selectMyProfile } from "./store/user/myProfile-slice";
 import { selectAuth, initiateToken } from "./store/user/auth-slice";
-
 
 //Import modals
 import PopupModal from "./components/modals/Popup";
@@ -165,14 +162,17 @@ function App() {
             </Route>
           </Routes>
         ) : (
-          <Routes>
-            {/* Unauthenticated */}
-            <Route path="/" element={<Landing />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
+          <>
+            <Routes>
+              {/* Unauthenticated */}
+              <Route path="/" element={<Landing />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+            
+          </>
         )}
 
         <MobileSubNav isLoggedIn={auth.isAuth} />

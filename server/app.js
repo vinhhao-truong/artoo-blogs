@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
@@ -15,6 +16,8 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
+// Have Node serve the files for our built React app
+app.use(express.static(path.resolve(__dirname, "../client/build")));
 
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
@@ -34,18 +37,14 @@ mongoose.connect(
 app.use("/users", userRouter);
 app.use("/blogs", blogRouter);
 
-
 io.on("connection", (socket) => {
-  console.log(socket.id)
-  socket.on("send_msg", msg => {
-    console.log(msg)
+  console.log(socket.id);
+  socket.on("send_msg", (msg) => {
+    console.log(msg);
   });
 });
 
-
-
-
 httpServer.listen(3001, () => {
   console.log("Server on 3001");
-  console.log()
+  console.log();
 });

@@ -13,26 +13,35 @@ import MenuThreeDots from "../components/fragments/MenuThreeDots";
 
 import { getBackURL } from "../fns/getURLPath";
 import { setImgPreview } from "../store/user/features-slice";
+import { ChildHelmet } from "../components/fragments/Helmet";
+import TypeFilter from "../components/fragments/TypeFilter";
 
 const ProfileDetail = ({ profile }) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const displayName = profile.nickname ? profile.nickname : profile.firstName
+  const displayName = profile.nickname ? profile.nickname : profile.firstName;
 
   const handlePreview = () => {
-    dispatch(setImgPreview({
-      isOpen: true,
-      title: `${displayName}'s photo`,
-      imgUrl: profile.profileImg
-    }))
-  }
+    dispatch(
+      setImgPreview({
+        isOpen: true,
+        title: `${displayName}'s photo`,
+        imgUrl: profile.profileImg,
+      })
+    );
+  };
 
   return (
     <div className="Profile__profile__detail">
       <MenuThreeDots menuClasses="menu" profile={profile} />
 
       <div className="top">
-        <img className="img" src={profile.profileImg} alt="profileImg" onClick={handlePreview} />
+        <img
+          className="img"
+          src={profile.profileImg}
+          alt="profileImg"
+          onClick={handlePreview}
+        />
 
         <h2
           className="displayName"
@@ -94,13 +103,14 @@ const ProfileDetail = ({ profile }) => {
 };
 
 const Profile = () => {
-  const [profile, setProfile] = useState(null);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [emptyBlogMsg, setEmptyBlogMsg] = useState("");
-
   const location = useLocation();
   const pathname = location.pathname;
   const currentUid = pathname.substring(pathname.lastIndexOf("/") + 1);
+
+  const [profile, setProfile] = useState(null);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [emptyBlogMsg, setEmptyBlogMsg] = useState("");
+  const [blogListApiUrl, setBlogListApiUrl] = useState(getBackURL(`/users/${currentUid}?q=myBlogs`));
 
   const { resData } = useGETFetch(getBackURL(`/users/${currentUid}`));
   const myProfile = useSelector(selectMyProfile);
@@ -123,16 +133,32 @@ const Profile = () => {
     }
   }, [resData, myProfile, currentUid]);
 
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const filterParam = searchParams.get("filter");
+    if (filterParam) {
+      setBlogListApiUrl(
+        getBackURL(`/users/${profile._id}?q=myBlogs&artType=${filterParam}`)
+      );
+    } else {
+      setBlogListApiUrl(getBackURL(`/users/${currentUid}?q=myBlogs`));
+    }
+  }, [location, profile]);
+
   return (
     <>
       <div className="Profile">
         {profile && (
           <>
+            <ChildHelmet
+              title={profile.nickname ? profile.nickname : profile.firstName}
+            />
+            <TypeFilter uid={currentUid} />
             <FetchedBlogList
-              className="Profile_blogList"
-              url={getBackURL(`/users/${profile._id}?q=myBlogs`)}
+              className="Profile__blogList"
+              url={blogListApiUrl}
               emptyMsg={emptyBlogMsg}
-              state={myProfile}
+              state={profile}
             />
             <div className="Profile__profile">
               <ProfileDetail profile={profile} />

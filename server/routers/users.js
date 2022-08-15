@@ -29,29 +29,29 @@ usersRouter
       if (request === "signup") {
         const reqNewUser = body.newUser;
         try {
-        //update displayName for firebase to handle email verification
-        await axios.post(
-          getFirebaseURL(
-            "https://identitytoolkit.googleapis.com/v1/accounts:update"
-          ),
-          {
-            idToken: reqNewUser.idToken,
-            displayName: reqNewUser.nickname
-              ? reqNewUser.nickname
-              : reqNewUser.firstName,
-          }
-        );
-        //email verification sent
-        await axios.post(
-          getFirebaseURL(
-            "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode"
-          ),
-          {
-            idToken: reqNewUser.idToken,
-            requestType: "VERIFY_EMAIL",
-          }
-        );
-        const newUser = new UserModel(reqNewUser);
+          //update displayName for firebase to handle email verification
+          await axios.post(
+            getFirebaseURL(
+              "https://identitytoolkit.googleapis.com/v1/accounts:update"
+            ),
+            {
+              idToken: reqNewUser.idToken,
+              displayName: reqNewUser.nickname
+                ? reqNewUser.nickname
+                : reqNewUser.firstName,
+            }
+          );
+          //email verification sent
+          await axios.post(
+            getFirebaseURL(
+              "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode"
+            ),
+            {
+              idToken: reqNewUser.idToken,
+              requestType: "VERIFY_EMAIL",
+            }
+          );
+          const newUser = new UserModel(reqNewUser);
           newUser.save();
           res.send(response("New User Created!", null));
         } catch (err) {
@@ -128,14 +128,23 @@ usersRouter.route("/search").get((req, res) => {
 });
 usersRouter.route("/:uid").get((req, res) => {
   const userId = req.params.uid;
-  const query = req.query.q;
+  const questionQuery = req.query.q;
+  const artTypeQuery = req.query.artType;
 
-  if (query) {
-    switch (query) {
+  if (questionQuery) {
+    switch (questionQuery) {
       case "myBlogs":
-        handleFind("Blog list is found!", res, BlogModel, "find", {
-          owner: userId,
-        });
+        if (artTypeQuery) {
+          handleFind("Blog list is found!", res, BlogModel, "find", {
+            owner: userId,
+            artType: artTypeQuery
+          });
+        } else {
+          handleFind("Blog list is found!", res, BlogModel, "find", {
+            owner: userId,
+          });
+        }
+
         break;
       case "pickedColor":
         handleFind(
@@ -151,7 +160,7 @@ usersRouter.route("/:uid").get((req, res) => {
     }
   }
 
-  if (!query) {
+  if (!questionQuery) {
     handleFind("User is found!", res, UserModel, "findOne", { _id: userId });
   }
 });

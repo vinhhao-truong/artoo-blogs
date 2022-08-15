@@ -1,6 +1,6 @@
 import React, { useState, useRef, forwardRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../../store/user/auth-slice";
+import { logout, selectAuth } from "../../store/user/auth-slice";
 import { selectMyProfile } from "../../store/user/myProfile-slice";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { TiArrowSortedDown } from "react-icons/ti";
 import { BiNews, BiHomeSmile, BiLogIn } from "react-icons/bi";
-import {MdOutlineAssignmentInd} from 'react-icons/md'
+import { MdOutlineAssignmentInd } from "react-icons/md";
 
 import useResponsive from "../../hooks/useResponsive";
 import { ControlledMenu, MenuItem } from "@szhsin/react-menu";
@@ -63,7 +63,6 @@ const PrivateNav = ({ isMobileOrTablet }) => {
   const [searchContent, setSearchContent] = useState("");
   const [searchList, setSearchList] = useState(null);
   const [isSearchLoading, setIsSearchLoading] = useState(false);
-  
 
   const myProfile = useSelector(selectMyProfile);
   const dispatch = useDispatch();
@@ -137,7 +136,7 @@ const PrivateNav = ({ isMobileOrTablet }) => {
     {
       name: "Account Settings",
       onClick: () => {
-        navigate("/account")
+        navigate("/account");
       },
     },
     {
@@ -200,10 +199,7 @@ const PrivateNav = ({ isMobileOrTablet }) => {
             </p>
           )}
           <div className="image">
-            <img
-              src={myProfile.profileImg}
-              alt=""
-            />
+            <img src={myProfile.profileImg} alt="" />
             <TiArrowSortedDown />
           </div>
         </SideProfile>
@@ -229,7 +225,7 @@ const PrivateNav = ({ isMobileOrTablet }) => {
 };
 
 //not auth
-const PublicNav = ({ isMobileOrTablet }) => {
+const PublicNav = () => {
   const mainItems = [
     {
       icon: <BiLogIn />,
@@ -244,7 +240,7 @@ const PublicNav = ({ isMobileOrTablet }) => {
   ];
 
   return (
-    <NavMain className={`PublicNav ${isMobileOrTablet ? "mobile" : ""}`}>
+    <NavMain className={`PublicNav`}>
       {mainItems.map((item, idx) => (
         <NavMainItem key={idx} item={item} />
       ))}
@@ -255,27 +251,36 @@ const PublicNav = ({ isMobileOrTablet }) => {
 const Navigation = ({ isLoggedIn, setIsRefreshed }) => {
   const isTabletOrMobile = useResponsive("Tablet or Mobile");
   const location = useLocation();
+  const auth = useSelector(selectAuth);
   // console.log(location);
   return (
-    <div className="Navigation">
-      <Logo>
-        <Link
-          to="/"
-          onClick={() => {
-            if (location.pathname === "/" && !location.search) {
-              setIsRefreshed(true);
-            }
-          }}
-        >
-          <span className="pickedColor-hover">Artoo</span> Blogs
-        </Link>
-      </Logo>
-      {isLoggedIn ? (
-        <PrivateNav isMobileOrTablet={isTabletOrMobile} />
-      ) : (
-        <PublicNav isMobileOrTablet={isTabletOrMobile} />
-      )}
-    </div>
+    <>
+    {
+      //No nav on landing page
+      (auth.isAuth || location.pathname !== "/") && (
+        <div className="Navigation">
+        <Logo>
+          <Link
+            to="/"
+            onClick={() => {
+              if (location.pathname === "/" && !location.search) {
+                setIsRefreshed(true);
+              }
+            }}
+          >
+            <span className="pickedColor-hover">Artoo</span> Blogs
+          </Link>
+        </Logo>
+        {isLoggedIn ? (
+          <PrivateNav isMobileOrTablet={isTabletOrMobile} />
+        ) : (
+          <PublicNav />
+        )}
+      </div>
+      )
+    }
+      
+    </>
   );
 };
 

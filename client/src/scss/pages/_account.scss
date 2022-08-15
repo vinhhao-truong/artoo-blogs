@@ -1,61 +1,66 @@
 @import "../variables";
 
-.Account {
-  background-color: $white;
-  border-radius: 10px;
-  margin-top: 1rem;
-  width: 60rem;
-  max-width: 95%;
-  min-height: 20rem;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
-  @include flexAll;
-  &__nav {
-    width: 30%;
-    @include flexAll(flex-start, flex-start, column);
-    & > a {
-      width: 100%;
-      padding: 0.5rem;
-      background-color: $white;
-      filter: brightness(97%);
-      &:hover {
-        filter: brightness(95%);
+.AccountPage {
+  min-height: calc(100vh - 6rem - 1rem);
+  .Account {
+    background-color: $white;
+    border-radius: 10px;
+    margin-top: 1rem;
+    width: 60rem;
+    max-width: 95%;
+    min-height: 20rem;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    @include flexAll;
+    &__nav {
+      width: 30%;
+      @include flexAll(flex-start, flex-start, column);
+      & > a {
+        width: 100%;
+        padding: 0.5rem;
+        background-color: $white;
+        filter: brightness(97%);
+        &:hover {
+          filter: brightness(95%);
+        }
+        &.active,
+        &:active {
+          filter: brightness(100%);
+        }
       }
-      &.active, &:active {
-        filter: brightness(100%);
+      // a:first-child {
+      //   border-top-left-radius: 10px;
+      // }
+      // a:last-child {
+      //   border-bottom-left-radius: 10px;
+      // }
+    }
+    &__main {
+      width: 70%;
+      padding: 3rem;
+      align-self: flex-start;
+      .txt-field,
+      .password-field {
+        margin-bottom: 1rem;
       }
-    }
-    // a:first-child {
-    //   border-top-left-radius: 10px;
-    // }
-    // a:last-child {
-    //   border-bottom-left-radius: 10px;
-    // }
-  }
-  &__main {
-    width: 70%;
-    padding: 3rem;
-    align-self: flex-start;
-    .txt-field, .password-field {
-      margin-bottom: 1rem;
-    }
-    button {
-      position: relative;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 0.5rem 1.5rem;
-      border: none;
-      border-radius: 30px;
-      outline: none;
-      cursor: pointer;
-      &:hover {
-        filter: brightness(90%);
+      button {
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 0.5rem 1.5rem;
+        border: none;
+        border-radius: 30px;
+        outline: none;
+        cursor: pointer;
+        &:hover {
+          filter: brightness(90%);
+        }
       }
-    }
-    .loading {
-      display: block;
-      margin: 0 auto;
+      .loading {
+        display: block;
+        margin: 0 auto;
+      }
     }
   }
 }

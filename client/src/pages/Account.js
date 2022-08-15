@@ -23,6 +23,7 @@ import {
 import presetColor from "../preset/presetColor";
 import AlertModal from "../components/modals/Alert";
 import ReactLoading from "react-loading";
+import { ChildHelmet } from "../components/fragments/Helmet";
 
 const StyledAccountSettings = styled.div`
   .Account__nav {
@@ -634,18 +635,21 @@ const Account = () => {
   }, [location, navigate]);
 
   return (
-    <StyledAccountSettings
-      pickedColor={myProfile.pickedColor}
-      className="Account"
-    >
-      <div className="Account__nav">
-        <NavLink to="/account/info">Account Info</NavLink>
-        <NavLink to="/account/verify">Verify Email</NavLink>
-        <NavLink to="/account/change-email">Change Email</NavLink>
-        <NavLink to="/account/change-password">Change Password</NavLink>
-      </div>
-      <Outlet />
-    </StyledAccountSettings>
+    <div className="AccountPage">
+      <ChildHelmet title="Account" />
+      <StyledAccountSettings
+        pickedColor={myProfile.pickedColor}
+        className="Account"
+      >
+        <div className="Account__nav">
+          <NavLink to="/account/info">Account Info</NavLink>
+          <NavLink to="/account/verify">Verify Email</NavLink>
+          <NavLink to="/account/change-email">Change Email</NavLink>
+          <NavLink to="/account/change-password">Change Password</NavLink>
+        </div>
+        <Outlet />
+      </StyledAccountSettings>
+    </div>
   );
 };
 

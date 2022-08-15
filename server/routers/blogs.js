@@ -85,7 +85,13 @@ blogRouter.route("/filter/:resData").get((req, res) => {
         let typeList = [];
         BlogModel.find((findErr, foundBlogs) => {
           if (!findErr) {
-            typeList = foundBlogs.map((blog) => blog.artType);
+            let finalFoundBlogs = [];
+            if(query.for === "all") {
+              finalFoundBlogs = [...foundBlogs]
+            } else {
+              finalFoundBlogs = foundBlogs.filter(blog => blog.owner === query.for)
+            }
+            typeList = finalFoundBlogs.map((blog) => blog.artType);
             const filteredTypeList = [];
             for (let type of typeList) {
               if (!filteredTypeList.includes(type) && type.length !== 0) {
@@ -112,8 +118,8 @@ blogRouter.route("/filter/:resData").get((req, res) => {
             "Filtered blogs found or error occurred (if have above)!"
           );
         }
-        if (query.artTypes) {
-        }
+
+        
       }
     }
   }

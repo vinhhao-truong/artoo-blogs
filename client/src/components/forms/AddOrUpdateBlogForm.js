@@ -361,7 +361,7 @@ const AddOrUpdateBlogForm = ({ closeModal, action, existedBlog }) => {
               className="clearBtn"
               onClick={handleClearImg}
             >
-              <TbInboxOff /> Delete Images From The Post?
+              <TbInboxOff /> Delete Selected Images?
             </button>
           )}
         </div>

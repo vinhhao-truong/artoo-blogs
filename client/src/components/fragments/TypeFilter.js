@@ -8,8 +8,10 @@ import { useSelector } from "react-redux";
 import { selectMyProfile } from "../../store/user/myProfile-slice";
 
 import upperFirstLetter from "../../fns/upperFirstLetter";
+import useGETFetch from "../../hooks/useFetch";
+import { getBackURL } from "../../fns/getURLPath";
 
-const TypeFilter = ({ typeList }) => {
+const TypeFilter = ({ isAll, uid }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const menuRef = useRef();
@@ -17,7 +19,8 @@ const TypeFilter = ({ typeList }) => {
   const myProfile = useSelector(selectMyProfile);
   const navigate = useNavigate();
 
-  const renderedList = typeList ? ["all", ...typeList].sort() : null;
+  const { resData: list} = useGETFetch(getBackURL(`/blogs/filter/allArtTypes?for=${isAll ? "all": uid}`))
+  const renderedList = list ? ["all", ...list].sort() : null;
 
   const handleFilter = (query) => () => {
     switch (query) {
@@ -67,13 +70,13 @@ const TypeFilter = ({ typeList }) => {
         offsetX={5}
         align="center"
       >
-        {typeList &&
+        {list &&
           renderedList.map((type, idx) => (
             <MenuItem onClick={handleFilter(type.toLowerCase())} key={idx}>
               {upperFirstLetter(type)}
             </MenuItem>
           ))}
-        {!typeList && (
+        {!list && (
           <ReactLoading
             color={myProfile.pickedColor}
             className="loading"

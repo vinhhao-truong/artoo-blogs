@@ -19,6 +19,7 @@ import { startLoading, stopLoading } from "../store/user/features-slice";
 
 import {firebaseStorage} from "../store/firebase"
 import { ref, uploadBytes } from "firebase/storage";
+import { ChildHelmet } from "../components/fragments/Helmet";
 
 
 const Signup = () => {
@@ -287,6 +288,7 @@ const Signup = () => {
       }
       className="Signup"
     >
+      <ChildHelmet title="Signup" />
       <form className="SignupForm" onSubmit={handleSubmitSignup}>
         <h1>
           Sign up to <span className="pickedColor">Artoo</span> Blogs

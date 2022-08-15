@@ -18,6 +18,7 @@ import upperFirstLetter from "../fns/upperFirstLetter";
 import { setLoadingBar } from "../store/user/features-slice";
 
 import { Image, Row, Col } from "antd";
+import {ChildHelmet} from "../components/fragments/Helmet";
 
 const ThisBlog = ({ owner, blog }) => {
   return (
@@ -139,7 +140,16 @@ const BlogDetail = () => {
   return (
     <div className="BlogDetail">
       {thisBlog && thisProfile && (
-        <ThisBlog blog={thisBlog} owner={thisProfile} />
+        <>
+          <ChildHelmet
+            title={`${
+              thisBlog.title.length >= 15
+                ? thisBlog.title.slice(0, 15) + "..."
+                : thisBlog.title
+            }`}
+          />
+          <ThisBlog blog={thisBlog} owner={thisProfile} />
+        </>
       )}
     </div>
   );

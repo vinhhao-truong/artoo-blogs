@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ChildHelmet } from "../components/fragments/Helmet";
 import AlertModal from "../components/modals/Alert";
 import { TxtField } from "../components/styled-components/StyledTextField";
 
@@ -112,6 +113,7 @@ const ForgotPassword = () => {
 
   return (
     <div className="ForgotPassword">
+      <ChildHelmet title="Forgot Password" />
       <form className="ForgotPasswordForm" onSubmit={handleSubmit}>
         <h1>Type Your Email for Password Reset</h1>
         <TxtField

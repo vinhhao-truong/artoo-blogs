@@ -59,5 +59,21 @@ body {
   }
   img {
     object-fit: cover !important;
+    width: 256px;
   }
+}
+
+.App {
+  min-height: 100vh;
+}
+
+.footer {
+  color: $grey;
+  position: fixed;
+  bottom: 1%;
+  left: 1%;
+}
+
+.szh-menu__item {
+  z-index: 3 !important;
 }

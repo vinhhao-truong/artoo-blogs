@@ -9,22 +9,16 @@ import AddBlogBtn from "../components/styled-components/AddBlogBtn";
 import FetchBlogList from "../components/fragments/FetchedBlogList";
 import TypeFilter from "../components/fragments/TypeFilter";
 
-import useGETFetch from "../hooks/useFetch";
-
 import { getBackURL } from "../fns/getURLPath";
+import { MainHelmet } from "../components/fragments/Helmet";
 
 const NewsFeed = ({ isHomeRefreshed }) => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [blogListApiUrl, setBlogListApiUrl] = useState(getBackURL("/blogs"));
   const [fetchState, setFetchState] = useState(false);
-  const [typeList, setTypeList] = useState(null);
   const myProfile = useSelector(selectMyProfile);
 
   const location = useLocation();
-
-  const { resData: typeFetched } = useGETFetch(
-    getBackURL("/blogs/filter/allArtTypes")
-  );
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -42,14 +36,11 @@ const NewsFeed = ({ isHomeRefreshed }) => {
     }
   }, [location, isHomeRefreshed, fetchState, myProfile]);
 
-  useEffect(() => {
-    setTypeList(typeFetched);
-  }, [typeFetched]);
-
   return (
     <>
       <div className="NewsFeed">
-        <TypeFilter typeList={typeList} />
+        <MainHelmet />
+        <TypeFilter isAll />
         <FetchBlogList
           url={blogListApiUrl}
           emptyMsg="No blogs to show!"

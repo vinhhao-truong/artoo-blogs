@@ -259,6 +259,7 @@ const UpdateProfileForm = ({ closeModal }) => {
         value={newProfile.bio}
         fullWidth
         maxRows={6}
+        inputProps={{ maxLength: 400 }}
       />
       <button className="submit-btn">Update</button>
     </StyledForm>
