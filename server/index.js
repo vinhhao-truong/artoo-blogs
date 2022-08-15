@@ -1,7 +1,5 @@
 const express = require("express");
 const path = require("path");
-const { createServer } = require("http");
-const { Server } = require("socket.io");
 const cors = require("cors");
 const mongoose = require("mongoose");
 
@@ -19,14 +17,6 @@ app.use(cors());
 // Have Node serve the files for our built React app
 app.use(express.static(path.resolve(__dirname, "../client/build/")));
 
-const httpServer = createServer(app);
-const io = new Server(httpServer, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
-  },
-});
-
 mongoose.connect(
   "mongodb+srv://artoo_admin:h02468975310h@cluster0.67krx.mongodb.net/artooDB",
   {
@@ -41,14 +31,7 @@ app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
 });
 
-io.on("connection", (socket) => {
-  console.log(socket.id);
-  socket.on("send_msg", (msg) => {
-    console.log(msg);
-  });
-});
-
-httpServer.listen(3001, () => {
+app.listen(3001, () => {
   console.log("Server on 3001");
   console.log();
 });
