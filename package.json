@@ -1,0 +1,27 @@
+{
+  "name": "artoo-blogs",
+  "version": "1.0.0",
+  "description": "Artoo Blogs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vinhhao-truong/artoo-blogs.git"
+  },
+  "author": "Arnold Truong",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vinhhao-truong/artoo-blogs/issues"
+  },
+  "homepage": "https://github.com/vinhhao-truong/artoo-blogs#readme",
+  "engines": {
+    "node": "16.14.2",
+    "npm": "7.22.0"
+    },
+    "scripts": {
+    "start": "node index.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+    }
+}
