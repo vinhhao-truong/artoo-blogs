@@ -31,7 +31,7 @@ import {
   deleteObject,
 } from "firebase/storage";
 import { ImCross } from "react-icons/im";
-import {TbInboxOff} from "react-icons/tb"
+import { TbInboxOff } from "react-icons/tb";
 
 const AddOrUpdateBlogForm = ({ closeModal, action, existedBlog }) => {
   const myProfile = useSelector(selectMyProfile);
@@ -89,21 +89,25 @@ const AddOrUpdateBlogForm = ({ closeModal, action, existedBlog }) => {
   useEffect(() => {
     if (!selectedImages) {
       return;
-    } else {
-      setImgList((prev) => [...prev, ...selectedImages]);
     }
     if (selectedImages.length === 1) {
       const objectUrl = URL.createObjectURL(selectedImages[0]);
       setImgPreviewList((prev) => [...prev, objectUrl]);
       // free memory when ever this component is unmounted
-      return () => URL.revokeObjectURL(objectUrl);
+      return () => {
+        // imgSelectRef.current.value = null;
+        URL.revokeObjectURL(objectUrl);
+      };
     } else {
       for (let i = 0; i < selectedImages.length; i++) {
         const objectUrl = URL.createObjectURL(selectedImages[i]);
         setImgPreviewList((prev) => [...prev, objectUrl]);
         // free memory when ever this component is unmounted
         if (i === selectedImages.length - 1) {
-          return () => URL.revokeObjectURL(objectUrl);
+          return () => {
+            // imgSelectRef.current.value = null;
+            URL.revokeObjectURL(objectUrl);
+          };
         }
       }
     }
@@ -252,7 +256,9 @@ const AddOrUpdateBlogForm = ({ closeModal, action, existedBlog }) => {
     if (!e.target.files || e.target.files.length === 0) {
       return;
     }
-    setSelectedImages([...e.target.files]);
+    setSelectedImages([...e.target.files])
+    setImgList((prev) => [...prev, ...e.target.files]);
+    e.target.value = null;
   };
 
   const handleClearImg = (e) => {
@@ -344,6 +350,8 @@ const AddOrUpdateBlogForm = ({ closeModal, action, existedBlog }) => {
             <p>Upload Image</p>
             <input
               onChange={handleSelectedImg}
+              onClick={() => {
+              }}
               type="file"
               name="add-img"
               id="add-img"
