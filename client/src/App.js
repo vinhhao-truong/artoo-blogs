@@ -44,9 +44,11 @@ import PopupModal from "./components/modals/Popup";
 import LoadingModal from "./components/modals/Loading";
 import AlertModal from "./components/modals/Alert";
 import ImgPreviewModal from "./components/modals/ImgPreview";
+import { selectFeatures } from "./store/user/features-slice";
 
 function App() {
   const auth = useSelector(selectAuth);
+  const features = useSelector(selectFeatures);
   const dispatch = useDispatch();
   const [isRefreshed, setIsRefreshed] = useState(false);
 
@@ -70,7 +72,7 @@ function App() {
     if (auth.isAuth) {
       initiateMyProfile();
     }
-  }, [auth.isAuth]);
+  }, []);
 
   const exchangeIdTokenAndVerificationReq = async (refreshToken) => {
     try {
@@ -130,9 +132,10 @@ function App() {
   return (
     <BrowserRouter>
       <StyledApp uid={auth.uid}>
+        {(features.loadingBar.progress > 0) && <TopLoadingBar />}
+        {/* <TopLoadingBar /> */}
         <Navigation isLoggedIn={auth.isAuth} setIsRefreshed={setIsRefreshed} />
         <PopupModal />
-        <TopLoadingBar />
         <LoadingModal />
         <ImgPreviewModal />
         {auth.isAuth ? (
@@ -157,7 +160,10 @@ function App() {
                 path="/account/change-password"
                 element={<ChangePassword />}
               />
-              <Route path="/account/*" element={<Navigate to="/not-found" replace />} />
+              <Route
+                path="/account/*"
+                element={<Navigate to="/not-found" replace />}
+              />
             </Route>
             <Route path="/not-found" element={<NotFound />} />
             <Route path="*" element={<Navigate to="/not-found" replace />} />

@@ -67,6 +67,9 @@ const AccountInfo = () => {
               idToken: auth.idToken,
             }
           );
+          setTimeout(() => {
+            dispatch(setLoadingBar(1));
+          }, 1000);
           dispatch(setLoadingBar(50));
           const resData = accountRes.data.users[0];
           setInfo({
@@ -79,6 +82,9 @@ const AccountInfo = () => {
         console.log(err);
       }
       setIsLoading(false);
+      setTimeout(() => {
+        dispatch(setLoadingBar(99));
+      }, 1000);
       dispatch(setLoadingBar(100));
     })();
   }, [auth]);
@@ -183,6 +189,9 @@ const VerifyEmail = () => {
               idToken: auth.idToken,
             }
           );
+          setTimeout(() => {
+            dispatch(setLoadingBar(1));
+          }, 1000);
           dispatch(setLoadingBar(50));
 
           setIsVerified(accountRes.data.users[0].emailVerified);
@@ -191,6 +200,9 @@ const VerifyEmail = () => {
         console.log(err);
       }
       setIsLoading(false);
+      setTimeout(() => {
+        dispatch(setLoadingBar(99));
+      }, 1000);
       dispatch(setLoadingBar(100));
     })();
   }, [isVerified, auth]);

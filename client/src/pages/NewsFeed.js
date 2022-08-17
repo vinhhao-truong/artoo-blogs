@@ -33,7 +33,7 @@ const NewsFeed = ({ isHomeRefreshed }) => {
     } else {
       setBlogListApiUrl("/blogs");
     }
-  }, [location, isHomeRefreshed, fetchState, myProfile]);
+  }, [location, isHomeRefreshed, fetchState]);
 
   return (
     <>

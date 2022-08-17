@@ -18,32 +18,35 @@ const BlogList = ({ blogs, className }) => {
 };
 
 const FetchedBlogList = ({ url, emptyMsg, state, className }) => {
-
   const [isNoBlog, setIsNoBlog] = useState(false);
   const [blogList, setBlogList] = useState(null);
-
 
   const dispatch = useDispatch();
 
   const callFetchedList = async () => {
-    dispatch(setLoadingBar(33));
-    try {
-      const res = await axios.get(url);
-
-      dispatch(setLoadingBar(66));
-      const data = await res.data.data;
-      if (data.length > 0) {
-        setBlogList(data.sort((a, b) => (b.uploadTime > a.uploadTime) ? 1 : -1));
-        setIsNoBlog(false);
-      } else {
-        setBlogList(null);
-        setIsNoBlog(true);
+    if (url) {
+      try {
+        // setTimeout(() => {
+        //   dispatch(setLoadingBar(1));
+        // }, 1000);
+        dispatch(setLoadingBar(33));
+        const res = await axios.get(url);
+        dispatch(setLoadingBar(66));
+        const data = await res.data.data;
+        if (data.length > 0) {
+          setBlogList(
+            data.sort((a, b) => (b.uploadTime > a.uploadTime ? 1 : -1))
+          );
+          setIsNoBlog(false);
+        } else {
+          setBlogList(null);
+          setIsNoBlog(true);
+        }
+      } catch (err) {
+        console.log(err);
       }
-      
-    } catch (err) {
-      console.log(err);
+      dispatch(setLoadingBar(100));
     }
-    dispatch(setLoadingBar(100));
   };
 
   useEffect(() => {
@@ -56,7 +59,9 @@ const FetchedBlogList = ({ url, emptyMsg, state, className }) => {
   return (
     <>
       {isNoBlog && !blogList && <EmptyList msg={emptyMsg} />}
-      {!isNoBlog && blogList && <BlogList className={className ? className : ""} blogs={blogList} />}
+      {!isNoBlog && blogList && (
+        <BlogList className={className ? className : ""} blogs={blogList} />
+      )}
     </>
   );
 };

@@ -27,19 +27,21 @@ const MainHelmet = () => {
 };
 
 const ChildHelmet = ({ title, metaTags }) => {
-  const ogMeta = metaTags.filter(meta => {
+  const ogMeta = metaTags ? metaTags.filter(meta => {
     return meta.property && meta.content;
-  })
-  const nameMeta = metaTags.filter(meta => {
+  }) : {}
+  const nameMeta = metaTags ? metaTags.filter(meta => {
     return meta.name && meta.content;
-  })
+  }) : {}
 
   return (
     <Helmet>
       {
+        metaTags &&
         ogMeta.map((meta, idx) => (<meta key={idx + "-og"} property={`og:${meta.property}`} content={meta.content} />))
       }
       {
+        metaTags &&
         nameMeta.map((meta, idx) => (<meta key={idx + "-name"} name={meta.property} content={meta.content} />))
       }
       <link rel="manifest" href="../../../public/site.webmanifest" />

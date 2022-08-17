@@ -142,7 +142,6 @@ const BlogDetail = () => {
     myProfile,
     paramOwnerId,
     paramBlogId,
-    dispatch,
   ]);
 
   return (

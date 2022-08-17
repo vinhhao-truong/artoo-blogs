@@ -254,7 +254,6 @@ const Navigation = ({ isLoggedIn, setIsRefreshed }) => {
   const matchNotFound = useMatch("/not-found");
 
   const isRender = auth.isAuth || !matchHome;
-  console.log(location);
   return (
     <>
       {
